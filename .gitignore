@@ -37,3 +37,7 @@ build
 xbuild
 PROX/FOUNDATION/MESH_ARRAY/unit_tests/mesh_array_io/mesh_array_data_path.h
 PROX/FOUNDATION/MESH_ARRAY/unit_tests/mesh_array_tetgen/mesh_array_data_path.h
+bin/prox_cmdD
+bin/prox_cmd
+bin/prox_guiD
+bin/prox_gui
