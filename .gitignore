@@ -35,3 +35,5 @@
 bin/setup_default_files.cfg
 build
 xbuild
+PROX/FOUNDATION/MESH_ARRAY/unit_tests/mesh_array_io/mesh_array_data_path.h
+PROX/FOUNDATION/MESH_ARRAY/unit_tests/mesh_array_tetgen/mesh_array_data_path.h
