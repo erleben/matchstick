@@ -1,0 +1,37 @@
+INCLUDE_DIRECTORIES( 
+  ${PROJECT_SOURCE_DIR}/PROX/FOUNDATION/UTIL/UTIL/include 
+  ${PROJECT_SOURCE_DIR}/PROX/FOUNDATION/TINY/TINY/include 
+  ${PROJECT_SOURCE_DIR}/PROX/FOUNDATION/SPARSE/SPARSE/include 
+  ${PROJECT_SOURCE_DIR}/PROX/FOUNDATION/GEOMETRY/GEOMETRY/include 
+  ${PROJECT_SOURCE_DIR}/PROX/FOUNDATION/MESH_ARRAY/MESH_ARRAY/include
+  ${PROJECT_SOURCE_DIR}/PROX/SIMULATION/NARROW/NARROW/include
+  ${PROJECT_SOURCE_DIR}/PROX/SIMULATION/KDOP/KDOP/include
+  ${PROJECT_SOURCE_DIR}/PROX/SIMULATION/BROAD/BROAD/include 
+  ${PROJECT_SOURCE_DIR}/PROX/SIMULATION/PROX/PROX/include 
+  ${Boost_INCLUDE_DIRS} 
+)
+
+ADD_EXECUTABLE(
+  unit_prox_prod_jacobian_mass_block
+  prox_prod_jacobian_mass_block.cpp
+  )
+
+TARGET_LINK_LIBRARIES(
+  unit_prox_prod_jacobian_mass_block
+  util
+  tiny
+  sparse
+  geometry
+  mesh_array
+  broad
+  narrow
+  kdop
+  prox
+  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+  )
+
+ADD_TEST(
+  unit_prox_prod_jacobian_mass_block
+  unit_prox_prod_jacobian_mass_block
+  )
+

@@ -1,0 +1,361 @@
+\documentclass[twocolumn]{article}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[usenames,dvipsnames]{color} % good support for colors
+\usepackage{pstricks}
+
+\def\registered{\textsuperscript{\textregistered}}
+\def\copyright{\textsuperscript{\textcopyright}}
+\def\trademark{\textsuperscript{\texttrademark}}
+
+\newrgbcolor{kennycolor}{.1 .1 .7}
+\newcommand{\kenny}[1]{  { \bf \kennycolor Kenny:  #1}}
+
+\renewcommand{\vec}[1]{ \ensuremath{\mathbf{#1} } }
+\newcommand{\abs}[1]{\left| {#1} \right|}
+\newcommand{\quat}[1]{ #1 }
+\newcommand{\mat}[1]{\ensuremath{\mathbf{#1} }}
+\newcommand{\norm}[1]{\parallel {#1} \parallel}
+\renewcommand{\Re}{ \mathbb{R} }
+\newcommand{\set}[1]{\mathcal{#1}}
+\newcommand{\identity}{ \ensuremath{ \mat I }}
+\newcommand{\bigO}{ \ensuremath{ \mathcal{O} }}
+\newcommand{\atan }{ \ensuremath{ \phantom{\cdot}\text{atan}_2 } }
+\newcommand{\acos }{ \ensuremath{ \cos^{-1} } }
+\newcommand{\asin }{ \ensuremath{ \sin^{-1} } }
+\newcommand{\logand }{ \ensuremath{ \wedge } }
+\newcommand{\logor }{ \ensuremath{ \vee } }
+\newcommand{\degree}{\,^{\circ}}
+\renewcommand{\th}{ \ensuremath{ ^{\text{th}}} }
+\newcommand{\sgn }[1]{ \ensuremath{ \text{sgn}\left( #1 \right) } }
+\newcommand{\union}{\ensuremath{ \cup }}
+\newcommand{\intersection}{\ensuremath{ \cap }}
+\newcommand{\hull }[1]{ \ensuremath{ \text{convex hull}\left( #1 \right) } }
+\newcommand{\proj }[1]{ \ensuremath{ \text{proj}\left( #1 \right) } }
+\newcommand{\trace }[1]{ \ensuremath{ \text{tr}\left( #1 \right) } }
+\newcommand{\inertia}{\ensuremath{\mathcal{I} }}
+\newcommand{\mass}{\ensuremath{\mathcal{M} }}
+
+\title{Hints for using the MASS Library}
+\author{Kenny Erleben}
+\date{December 2010}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  The MASS library was created to provide a functional toolbox for handling mass
+  properties of rigid bodies. This includes functions for computing the total
+  mass of an object $\mass$ the center of mass position $\vec r$ and the inertia
+  tensor $\inertia$. These values depend on the chosen frame of reference. To
+  achieve a correct physical simulation it is important to apply the correct
+  mass values. In this short paper we will address the issues in computing the
+  values of mass properties of rigid bodies and compounds hereof. Our
+  contribution includes a description of how to deal with initialization and the
+  visualization synchronizations of rigid bodies and the construction of
+  compound bodies.
+\end{abstract}
+
+\section*{Creation of a Rigid Body}
+When creating content in rigid body simulators several different coordinate
+frames are used. We will work with three different coordinate frames
+\begin{description}
+\item[The world frame] is the world coordinate frame wherein everything can be
+  absolutely placed.
+\item[The body frame ] refers to the coordinate frame with its origin at the
+  center of mass of a given rigid body and the orientation of the frame chosen
+  such that the inertia tensor of the given body is a constant and diagonal
+  tensor.
+\item[The model frame] is some convenient frame used to describe the geometry
+  in. The frame is fixed in the sense that it always will follow the same motion
+  as the geometry.
+\end{description}
+The model frame needs not be physically founded, but can in principle be defined
+anywhere where it make sense from an artistic or modelling viewpoint. From a
+modelling viewpoint one would define the geometry in some model reference frame
+and then place the model frames in the world frame. However, when connecting to
+a rigid body simulator one must account find the body frame as this is the one
+the simualtor works with. This leads to the following steps of actions
+\begin{enumerate}
+\item Compute model frame values $\mass$, $\vec r_M$, and $\inertia_M$
+\item Transform from model frame values into the body frame values $\inertia_B$.
+\item Given model frame placement in the world $\vec r$ and $\mat R$ compute the
+  body frame placement in the world $\vec r_B$ and $\mat R_B$.
+\end{enumerate}
+The MASS library provides routines for the first step. For the second step one
+would have to first transform the reference point to the center of mass position
+using the parallel-axis theorem ($\textbf{p-a-t}$)\footnote{See
+  $mass::translate_inertia$ function},
+\begin{equation}
+  \inertia^\prime = \textbf{p-a-t}(\inertia_M, - \vec   r_M) .
+\end{equation}
+Next we can apply eigen-value-decomposition to find the body frame
+values\footnote{See $mass::compute_orientation$ function},
+\begin{equation}
+  \inertia_M  = \mat R_M \inertia_B \mat R_M^T.
+\end{equation}
+Now given the model frame placement in the world frame we compute,
+\begin{subequations}
+  \begin{align}
+    \vec r_B &= \vec r - \mat R \vec r_M, \\
+    \mat R_B &= \mat R \mat R_M.
+  \end{align}
+\end{subequations}
+There is one more subtlety in the creation process. The rigid body simulator
+must know where its geometry is relative to its body frame. Thus, one should
+apply the transformation from model frame to body frame onto the geometry. That
+is first translate by $- \vec r_M$ and then rotation by $\mat
+R_M^{-1}$\footnote{Some simultors allow one to specify these transformations
+  directly. Other simulators assume geometry is living in body space in which
+  case one actually has to transform the geometry.}.
+
+\section*{Visualization Update of a Rigid Body}\label{sec:visualization-update}
+During simulation a rigid body simulator will compute new values of $\vec r_B$
+and $\mat R_B$. However, for the visualization one needs to find the new
+placement of the model frame in the world. Thus one must solve
+\begin{subequations}
+  \begin{align}
+    \vec r  &= \vec r_B + \mat R \vec r_M, \\
+    \mat R &= \mat R_B \mat R_M^{-1}.
+  \end{align}
+\end{subequations}
+Thus, one must always store the body frame to model frame transformation given
+by $\vec r_M$ and $\mat R_M$.
+
+
+\section*{The Curious Parallel Axis Theorem}\label{sec:curi-parall-axis}
+One has to be carefull when applying the parallel axis theorem. By its
+definition it transforms a body frame inertia tensors $\inertia$ into a modified
+tensor $\inertia^\prime$
+having the same orientation but a different reference point given by the
+translation $\vec d$
+\begin{subequations}
+  \begin{align}
+    \inertia_{\alpha \alpha}^\prime 
+    &=
+    \inertia_{\alpha \alpha} + \mass (\vec d_{\beta}^2  + \vec d_{\gamma}^2)\\
+    \inertia_{\alpha \beta}^\prime &=  \inertia_{\alpha \beta} - \mass (\vec
+    d_{\alpha} \vec d_{\beta})
+  \end{align}
+\end{subequations}
+Here the primed quantities would be the modified inertia tensor that no longer
+lives in the body space frame. The translation given here is the vector from the
+body space frame origin to the new origin of the new model frame.
+
+However, here comes the tricky part say one which to do another translation to
+get $\inertia^{\prime\prime}$ then one can not just apply the above formula to
+$\inertia^\prime$. Instead one must first transform $\inertia^\prime$ back to the
+body space frame using 
+\begin{subequations}
+  \begin{align}
+    \inertia_{\alpha \alpha} 
+    &=
+    \inertia_{\alpha \alpha}^\prime - \mass (\vec d_{\beta}^2  + \vec d_{\gamma}^2)
+    \\
+    \inertia_{\alpha \beta} 
+    &=
+    \inertia_{\alpha \beta}^\prime + \mass (\vec d_{\alpha} \vec d_{\beta})
+  \end{align}
+\end{subequations}
+and first then may one apply the transform taking one from the body space
+inertia tensor into the $\inertia^{\prime\prime}$ tensor.
+
+\section*{Creating Compounds}\label{sec:creating-compounds}
+As mass properties are defined by volume integrals it is easy to see that all we
+need to do is to make sure all properties are given with respect to the same
+reference frame. When this is the case we can simply sum up all the mass
+properties.
+
+Here we will give an example of two rigid bodies their body frame inertia
+tensors are given by the constant diagonal tensors $\inertia_A$ and
+$\inertia_B$. The center of mass positions are given by $\vec r_A$ and $\vec
+r_B$ and the orientatio of the body frames wrt. the world frame is given by
+$\mat R_A$ and $\mat R_B$.
+
+In our first step we will transform inertia tensors into the world frame
+\begin{subequations}
+\begin{align}
+  \inertia^{\prime}_A &\leftarrow \mat R_A \inertia_A \mat R_A^T,\\
+  \inertia^{\prime}_B &\leftarrow \mat R_B \inertia_B \mat R_B^T,\\
+  \inertia^{\prime^\prime}_A &\leftarrow \textbf{p-a-t}(\inertia_A^\prime,  \vec   r_A) ,\\
+  \inertia^{\prime^\prime}_B &\leftarrow \textbf{p-a-t}(\inertia_B^\prime, \vec
+  r_B) .
+\end{align}  
+\end{subequations}
+Next we may find the compund inertia tensor with reference to the world frame
+\begin{equation}
+  \inertia_C^\prime = \inertia^{\prime^\prime}_A + \inertia^{\prime^\prime}_B
+\end{equation}
+The total mass is simply
+\begin{equation}
+  \mass_C = \mass_A + \mass_B
+\end{equation}
+and the center of mass position is
+\begin{equation}
+  \vec r_C =  \frac{\mass_A \vec r_A + \mass_B \vec r_B}{ \mass_C}
+\end{equation}
+What remains is to find the body frame inertia tensor
+\begin{subequations}
+  \begin{align}
+    \inertia_C^{\prime\prime} &\leftarrow \textbf{p-a-t}(\inertia_C^\prime, - \vec   r_C) .\\
+    \mat R_C \inertia_C \mat R_C^T  &\leftarrow \inertia_C^{\prime\prime}
+  \end{align}
+\end{subequations}
+The recipe can be incremental extended straigthforwardly. Observe that there is
+one more snag as with the creation of rigid bodies one must ensure that
+geometries in the rigid body simulator is given writh respect to the new
+compound bodies body frame.
+
+
+
+
+\section*{Handling a Deformed Box}\label{sec:handl-deform-box}
+Imagine we are given a deformed box shape. We assume that the deformation can be
+specified by some linear coordinate transformation and write thie mathematically
+as
+\begin{equation*}
+  \begin{bmatrix}
+    x\\
+    y\\
+    z
+  \end{bmatrix}
+  =
+  \mat \Phi
+  \begin{bmatrix}
+    X\\
+    Y\\
+    Z
+  \end{bmatrix}
+\end{equation*}
+where the linear transformation is given by the matrix $\mat A$ that maps
+coordinates the $(X, Y, Z)$ from a regular unit box with its center placed at
+the origin into the deformed coordinates $(x, y, z)$. Here we assume that the
+mapping is bijective and thus $\mat  \Phi$ must be invertible implying we
+can find the inverse mapping given by $\mat \Phi^{-1}$
+
+We now wish to find closed form solutions for the mass properties of the
+deformed box. That is we wish to solve the volume integrals
+\begin{subequations}
+  \begin{align*}
+    \mass &= \int_v  \rho   dv \\
+    \vec r_x &= \frac{1}{\mass}\int_v  \rho \vec x  dv \\
+    \vec r_y &= \frac{1}{\mass}\int_v  \rho \vec y  dv \\
+    \vec r_z &= \frac{1}{\mass}\int_v  \rho \vec z  dv \\
+    \inertia_{xx} &= \int_v  \rho \left( y^2 + z^2 \right)  dv \\
+    \inertia_{yy} &= \int_v  \rho \left( x^2 + y^2 \right)  dv \\
+    \inertia_{zz} &= \int_v  \rho \left( x^2 + y^2 \right)  dv \\
+    \inertia_{xy} &= - \int_v  \rho \left( x y \right)  dv \\
+    \inertia_{xz} &= - \int_v  \rho \left( x z\right)  dv \\
+    \inertia_{yz} &= - \int_v  \rho \left( y z \right)  dv
+  \end{align*}
+\end{subequations}
+Our approach to finding the closed form solutions we seek is to rewrite the
+volume integrals such that we are integrating over the undeformed volume. The
+machinery is pretty much the same for all equations so we will here just treat
+one term in detail and leave the remaining terms for the reader.
+
+First we will make a change of variables using the formula $dv = j dV$ where $j
+= \det(\mat  \Phi)$
+\begin{subequations}
+  \begin{align*}
+    \inertia_{xx} &= \int_v  \rho \left( y^2 + z^2 \right)  dv \\
+    \inertia_{xx} &= j \rho \int_V   \left( y^2 + z^2 \right)  dV
+  \end{align*}  
+\end{subequations}
+Secondly we observe that the deformed coordinates are a linear mapping of
+undeformed coordinates that means
+\begin{subequations}
+  \begin{align*}
+    x  &=  \Phi_{11} X + \Phi_{12} Y + \Phi_{13} Z\\
+    y  &=  \Phi_{21} X + \Phi_{22} Y + \Phi_{23} Z\\
+    z  &=  \Phi_{31} X + \Phi_{32} Y + \Phi_{33} Z
+  \end{align*}
+\end{subequations}
+using this we have that
+\begin{equation*}
+  \begin{split}
+    y^2 + z^2 
+    =
+    \left(\Phi_{21} X + \Phi_{22} Y + \Phi_{23} Z\right)^2 
+    \quad \quad \quad \quad \quad 
+    \\
+    +
+    \left(\Phi_{31} X + \Phi_{32} Y    + \Phi_{33} Z\right)^2 
+    =
+    P_2(X,Y,Z)    
+  \end{split}
+\end{equation*}
+where $P_2$ denotes a general second order polynomial in $X$, $Y$ and $Z$. So
+now the volume integral reads
+\begin{subequations}
+  \begin{align*}
+    \inertia_{xx} 
+    &=
+    j \rho \int_V   P_2(X,Y,Z)  dV\\
+    &= 
+    j \rho 
+    \int_{-\frac{1}{2}}^{\frac{1}{2}}  
+    \int_{-\frac{1}{2}}^{\frac{1}{2}}  
+    \int_{-\frac{1}{2}}^{\frac{1}{2}}  
+    P_2(X,Y,Z)
+    dX
+    dY
+    dZ
+  \end{align*}
+\end{subequations}
+Which is straightforward to solve for a closed form solution. All that are
+missing in order to do this is formulas for the coefficients of $P_2$ in the
+given integral these are
+\begin{subequations}
+  \begin{align*}
+    P_2(X,Y,Z) 
+    &= \underbrace{ \left (\Phi_{21}^2 + \Phi_{31}^2\right) }_{a_{XX}} X^2 \\
+    &+ \underbrace{ \left (\Phi_{22}^2 + \Phi_{32}^2\right) }_{a_{YY}}  Y^2 \\
+    &+ \underbrace{ \left (\Phi_{23}^2 + \Phi_{33}^2\right) }_{a_{ZZ}}  Z^2\\
+    &+ \underbrace{ 2 \left ( \Phi_{21} \Phi_{22} + \Phi_{31} \Phi_{32} \right)
+    }_{a_{XY}}  X Y \\
+    &+ \underbrace{ 2 \left ( \Phi_{21} \Phi_{23} + \Phi_{31} \Phi_{33} \right)
+    }_{a_{XZ}}  X Z \\
+    &+ \underbrace{ 2 \left(\Phi_{22} \Phi_{23} + \Phi_{32} \Phi_{33}\right) }_{a_{YZ}} Y Z 
+  \end{align*}
+\end{subequations}
+From this we find
+\begin{subequations}
+  \begin{align*}
+    \inertia_{xx}
+    =
+    j \rho
+    \begin{bmatrix}
+      \begin{matrix}
+        \frac{a_{XX}}{3} X^3 Y Z +\frac{a_{yy}}{3} X Y^3 Z +\\
+        \quad \frac{a_{zz}}{3} X Y Z^3 +  \frac{a_{XY}}{4} X^2 Y^2  Z +\\
+        \quad \quad         \frac{a_{XZ}}{4} X^2 Y  Z^2 + \frac{a_{YZ}}{4} X Y^2  Z^2      
+      \end{matrix}
+    \end{bmatrix}_{ (-\frac{1}{2}, -\frac{1}{2}, -\frac{1}{2} ) } ^{ (
+      \frac{1}{2}, \frac{1}{2}, \frac{1}{2})  }
+  \end{align*}
+\end{subequations}
+From this we can generalize the recipe for deriving a closed form solution for
+all the volume intergrals. The other principal moments of inertia will be
+permutations of the above derivation. The products of moments are all similar
+and will also result in integrals of second order polynomials. The center of
+mass integrals all results in integrals of linear polynomials and the mass
+volume integral is straightforward.
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: pdflatex
+%%% TeX-master: t
+%%% End: 

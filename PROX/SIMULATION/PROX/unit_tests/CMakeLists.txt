@@ -1,0 +1,11 @@
+ADD_SUBDIRECTORY( prox_binders                  )
+ADD_SUBDIRECTORY( prox_inverse_mass_matrix      )
+ADD_SUBDIRECTORY( prox_mass_block               )
+ADD_SUBDIRECTORY( prox_prod_jacobian_mass_block )
+ADD_SUBDIRECTORY( prox_prod_mass_jac            )
+ADD_SUBDIRECTORY( prox_prod_mass_vec            )
+ADD_SUBDIRECTORY( prox_mappings                 )
+ADD_SUBDIRECTORY( prox_math_policy_functions    )
+ADD_SUBDIRECTORY( prox_position_vector          )
+ADD_SUBDIRECTORY( prox_velocity_vector          )
+

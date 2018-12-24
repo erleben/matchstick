@@ -1,0 +1,1 @@
+// Fake source file to make CMake stop whining

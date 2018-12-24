@@ -1,0 +1,28 @@
+obj_path              = @PROJECT_SOURCE_DIR@/bin/
+shader_path           = @PROJECT_SOURCE_DIR@/PROX/APPLICATIONS/PROX_GUI/shaders/
+output_path           = @PROJECT_SOURCE_DIR@/bin/output/
+working_directory     = @PROJECT_SOURCE_DIR@/bin/
+
+logging               = true      # Flip on/off log messages from application
+console               = true      # If true log messages goes to console, otherwise they are written to log file
+log_file              = log.txt   # The name of the log file to use 
+
+xml_load              = false
+xml_auto_save         = false
+xml_play              = false
+xml_record            = false
+
+xml_load_scene_file   = scene.xml
+xml_save_scene_file   = scene.xml
+xml_load_channel_file = channels.xml
+xml_save_channel_file = channels.xml
+
+profiling             = true
+matlab_file           = profiling.m
+
+framegrab             = false
+framegrab_file        = screen_
+
+save_contact_data     = false
+
+
