@@ -5,7 +5,7 @@
 
 namespace mesh_array
 {
-  std::string const data_path = "@PROJECT_SOURCE_DIR@/bin/resources/";
+  std::string const data_path = "@PROJECT_SOURCE_DIR@/";
 
 }//namespace mesh_array
 
