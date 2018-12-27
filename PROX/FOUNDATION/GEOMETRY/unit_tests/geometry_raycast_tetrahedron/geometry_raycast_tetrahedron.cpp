@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(raycast_tetrahedron)
     BOOST_CHECK( w3 <= 1.0);
 
     V                const hit_point       = w1*p1 + w2*p2 + w3*p3;
-    V                const ray_origin      = noise*10.0;
+    V                const ray_origin      = tiny::unit(noise)*10.0 ;
     V                const ray_direction   = hit_point - ray_origin;
     geometry::Ray<V> const ray             = geometry::make_ray(ray_origin, ray_direction);
 
