@@ -767,13 +767,6 @@ namespace prox
                              , Y
                              , Z
                              );
-      //      std::vector<V> normals;
-      //
-      //      mesh_array::compute_vertex_normals<MT>(mesh, X, Y, Z, normals);
-      //
-      //      T const distance = VT::numeric_cast(-0.01);
-      //
-      //      mesh_array::displace_vertices<MT>(mesh, X, Y, Z, distance, normals);
     }
 
     geometry.set_shape(
