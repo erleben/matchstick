@@ -153,13 +153,10 @@ namespace prox
 
     if(kdop::SelectContactPointAlgorithm::is_using_closest_point())
     {
-      //      mesh_array::shrink<TT>(
-      //                             VT::numeric_cast(0.99)
-      //                             , surface
-      //                             , surface_X
-      //                             , surface_Y
-      //                             , surface_Z
-      //                             );
+      // 2018-12-27 Kenny code review: For volumetric defined objects we use
+      // mesh_array::shrink for surface based defined shapes we use
+      // normal-displacements. This is a little inconsistent, one "approach"
+      // only should be used.
       std::vector<V> normals;
 
       mesh_array::compute_vertex_normals<MT>(surface, surface_X, surface_Y, surface_Z, normals);
