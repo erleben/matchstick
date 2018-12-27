@@ -94,7 +94,7 @@ namespace geometry
       T const rn  = tiny::inner_prod(ray.direction(), n[m] );
       T const on  = tiny::inner_prod(ray.origin(),    n[m] );
 
-      if(rn >= VT::zero())  // Ray is parallel with plane or hitting form back-side
+      if(rn >= VT::zero())  // Ray is parallel with plane or hitting from back-side
         continue;
 
       T const t = (w[m] - on) / rn;   // compute ray length for hitting the plane
@@ -102,7 +102,7 @@ namespace geometry
       if( t <  VT::zero() )  // if we hit behind the ray origin we give up
         continue;
 
-      V const q = ray.origin() + t* ray.direction();   // we know we are hitting the ray in front of ray origin
+      V const q = ray.origin() + t* ray.direction();   // we know we are hitting the plane in the front-side of ray origin
 
       unsigned int const i = (m+1u) % 4;
       unsigned int const j = (m+2u) % 4;
