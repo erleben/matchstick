@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(io_t3_tetgen_test)
   mesh_array::t3_vertex_float_attribute Y1(M1);
   mesh_array::t3_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_tetgen(mesh_array::data_path + "tetgen/tri", M1, X1, Y1, Z1);
+  mesh_array::read_tetgen(mesh_array::data_path + "unit_tests/tri", M1, X1, Y1, Z1);
 
   test_correct_tetgen(M1, X1, Y1, Z1);
 
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(io_t4_tetgen_test)
   mesh_array::t4_vertex_float_attribute Y1(M1);
   mesh_array::t4_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_tetgen(mesh_array::data_path + "tetgen/tet", M1, X1, Y1, Z1);
+  mesh_array::read_tetgen(mesh_array::data_path + "unit_tests/tet", M1, X1, Y1, Z1);
   
   test_correct_tetgen(M1, X1, Y1, Z1);
   
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(io_t4_xml_test)
   mesh_array::t4_vertex_float_attribute Y1(M1);
   mesh_array::t4_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_tetgen(mesh_array::data_path + "tetgen/tet", M1, X1, Y1, Z1);
+  mesh_array::read_tetgen(mesh_array::data_path + "unit_tests/tet", M1, X1, Y1, Z1);
 
   test_correct_tetgen(M1, X1, Y1, Z1);
   
@@ -335,7 +335,7 @@ BOOST_AUTO_TEST_CASE(io_t3_obj_test)
   mesh_array::t3_vertex_float_attribute Y1(M1);
   mesh_array::t3_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_obj(mesh_array::data_path + "objs/box.obj", M1, X1, Y1, Z1);
+  mesh_array::read_obj(mesh_array::data_path + "unit_tests/box.obj", M1, X1, Y1, Z1);
 
   test_correct_obj( M1, X1, Y1, Z1);
   
@@ -357,7 +357,7 @@ BOOST_AUTO_TEST_CASE(io_t3_matlab_test)
   mesh_array::t3_vertex_float_attribute Y1(M1);
   mesh_array::t3_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_obj(mesh_array::data_path + "objs/box.obj", M1, X1, Y1, Z1);
+  mesh_array::read_obj(mesh_array::data_path + "unit_tests/box.obj", M1, X1, Y1, Z1);
   
   test_correct_obj( M1, X1, Y1, Z1);
   
@@ -381,7 +381,7 @@ BOOST_AUTO_TEST_CASE(io_t4_matlab_test)
   mesh_array::t4_vertex_float_attribute Y1(M1);
   mesh_array::t4_vertex_float_attribute Z1(M1);
   
-  mesh_array::read_tetgen(mesh_array::data_path + "tetgen/tet", M1, X1, Y1, Z1);
+  mesh_array::read_tetgen(mesh_array::data_path + "unit_tests/tet", M1, X1, Y1, Z1);
   
   test_correct_tetgen(M1, X1, Y1, Z1);
   

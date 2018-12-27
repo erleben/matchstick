@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(tetgen_test)
   mesh_array::t3_vertex_float_attribute inY;
   mesh_array::t3_vertex_float_attribute inZ;
   
-  mesh_array::read_obj(mesh_array::data_path + "objs/box.obj",surface, inX, inY, inZ);
+  mesh_array::read_obj(mesh_array::data_path + "unit_tests/box.obj",surface, inX, inY, inZ);
 
   
   mesh_array::T4Mesh volume;
