@@ -493,12 +493,25 @@ namespace procedural
 
     if (Noise::on() )
     {
+      // 2018-12-27 Kenny: The idea of adding a little noise to the world is
+      // that it will break perfect symmatries and hence make it easier to
+      // generate contact points of type vertex-face instead of having more
+      // "singular" types of contact points such as vertex-vertex type.
       typedef typename MT::vector3_type V;
 
+      // 2018-12-27 Kenny: Retrieve the global noise level of the "world". This
+      // value is often parsed in from a cfg-file. It is stored as a "global"
+      // variable.
       V const noise = V::random(- Noise::scale(), Noise::scale());
 
-      //engine->set_rigid_body_position( rid, Tb2w(0)+ noise(0), Tb2w(1)+ noise(1), Tb2w(2)+ noise(2) );
-      engine->set_rigid_body_position( rid, Tb2w(0)+ noise(0), Tb2w(1), Tb2w(2)+ noise(2) );
+      // 2018-12-27 Kenny: The world up direction is usually the y-axis. Hence
+      // we add a bit of noise only in x and y directions in order not to
+      // create too many penetrations in the direction of gravity.
+      engine->set_rigid_body_position( rid
+                                      , Tb2w(0)+ noise(0)
+                                      , Tb2w(1)
+                                      , Tb2w(2)+ noise(2)
+                                      );
     }
     else
     {
