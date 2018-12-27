@@ -41,3 +41,7 @@ bin/prox_cmdD
 bin/prox_cmd
 bin/prox_guiD
 bin/prox_gui
+bin/output
+bin/temporary.ele
+bin/temporary.node
+bin/temporary.poly
