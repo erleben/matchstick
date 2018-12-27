@@ -485,11 +485,8 @@ namespace procedural
     
     size_t const rid = engine->create_rigid_body( body_name );
     
-      //2011-05-04 Mort: should these be passed as a parameter? Right now I have just hardcoded them to zero;
-      //set_rigid_body spin?
     engine->set_rigid_body_velocity( rid, VT::zero(), VT::zero(), VT::zero());
-
-
+    engine->set_rigid_body_spin( rid, VT::zero(), VT::zero(), VT::zero());
 
     if (Noise::on() )
     {
