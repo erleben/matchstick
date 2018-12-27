@@ -46,7 +46,6 @@ namespace prox
     size_t       m_material_idx;  ///< The material index of the rigid body.
     size_t       m_idx;           ///< A body index.
     std::string  m_name;          ///< A name
-    T            m_radius;        ///< A bounding radius of the rigid body.
 
     std::vector< force_callback  * >  m_force_callbacks;
     
@@ -68,7 +67,6 @@ namespace prox
       this->m_material_idx    = body.m_material_idx;
       this->m_idx             = body.m_idx;
       this->m_name            = body.m_name;
-      this->m_radius          = body.m_radius;
       this->m_force_callbacks = body.m_force_callbacks;
     }
     
@@ -110,7 +108,6 @@ namespace prox
       this->m_material_idx = 0u;
       this->m_idx = 0u;
       this->m_name = "";
-      this->m_radius = VT::one();
       this->m_force_callbacks.clear();
     }
     
@@ -147,25 +144,19 @@ namespace prox
     void set_name(std::string const & name) { this->m_name = name; }
     std::string const & get_name() const { return this->m_name; }
 
-    void set_radius( T const & value )
-    {
-      assert( value > VT::zero() || !"set_radius(): must be a positive value");
-      this->m_radius = value;
-    }
-
     /**
      * Broad phase interface implementation, must get information from narrow phase object interface about the geometry. 
      */
     void get_box(T & mx,T & my,T & mz,T & Mx,T & My,T & Mz) const
     {  
-      assert( this->m_radius > VT::zero() || !"get_box(): radius must be positive"                   );
+      assert( this->get_dynamic_radius() > VT::zero() || !"get_box(): radius must be positive"                   );
 
-      mx = this->m_r(0) - this->m_radius;
-      my = this->m_r(1) - this->m_radius;
-      mz = this->m_r(2) - this->m_radius;
-      Mx = this->m_r(0) + this->m_radius;
-      My = this->m_r(1) + this->m_radius;
-      Mz = this->m_r(2) + this->m_radius;
+      mx = this->m_r(0) - this->get_dynamic_radius();
+      my = this->m_r(1) - this->get_dynamic_radius();
+      mz = this->m_r(2) - this->get_dynamic_radius();
+      Mx = this->m_r(0) + this->get_dynamic_radius();
+      My = this->m_r(1) + this->get_dynamic_radius();
+      Mz = this->m_r(2) + this->get_dynamic_radius();
       
       assert( mx < Mx || !"get_box(): min x must be less than max x");
       assert( my < My || !"get_box(): min y must be less than max y");

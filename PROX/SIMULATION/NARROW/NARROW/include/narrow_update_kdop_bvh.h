@@ -14,6 +14,7 @@
 
 #include <cassert>
 #include <vector>
+#include <cmath>  // needed for std::max
 
 namespace narrow
 {
@@ -125,9 +126,13 @@ namespace narrow
   template<typename M>
   inline void update_kdop_bvh(  std::vector< UpdateWorkItem< M > > & work_pool )
   {
+    using std::max;
+
     typedef typename M::real_type                                      T;
     typedef typename M::vector3_type                                   V;
     typedef typename M::quaternion_type                                Q;
+    typedef typename M::value_traits                                   VT;
+
     typedef typename std::vector< UpdateWorkItem< M > >::iterator work_item_iterator;
     
     work_item_iterator current = work_pool.begin();
@@ -145,7 +150,12 @@ namespace narrow
 
       if( N <= 0u)
         continue;
-      
+
+      // 2018-12-27 Kenny code review: If this was a deformable body then X, Y
+      // and Z's would have been updated by the solver, and should not be
+      // updated here.
+      T radius = VT::zero();
+
       for(size_t n = 0u; n < N;++n)
       {
         mesh_array::Vertex const & v = geometry.m_mesh.vertex(n);
@@ -157,7 +167,11 @@ namespace narrow
         object.m_X(v) = r(0);
         object.m_Y(v) = r(1);
         object.m_Z(v) = r(2);
+
+        radius = max( radius, tiny::norm(r) );
       }
+      
+      object.set_dynamic_radius(radius);
 
       kdop::refit_tree<V,8,T>(  object.m_tree
                               , geometry.m_mesh

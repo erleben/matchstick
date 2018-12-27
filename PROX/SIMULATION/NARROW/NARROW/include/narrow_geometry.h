@@ -16,15 +16,12 @@ namespace narrow
   
   /**
    * Narrow Phase Geometry Type.
-   * The geometry of an object consists of a collection of shapes. The object defines
-   * a local coordinate system in which the shapes live. Ie. each shape has an associated
-   * transform that specifies how the shape is placed in the local object frame. When an
-   * object is simulated then the simulator essientially moves the local object frame
-   * to a new placement. However, the shapes rigidly follows the local object frames as it
-   * moves around.
+   * The geometry of an object is a "shape". A shape is how the object looks
+   * like initially when simulation starts up. For rigid bodies the shape
+   * does not change.
    *
-   * This class offers an interface for easy manipulation of the shapes that make up the geometry
-   * of an object.
+   * For a deformable object that shape may change and an updated version
+   * of the shape needs to be kept.
    *
    * @tparam M     The Math types used.
    */
@@ -48,8 +45,7 @@ namespace narrow
 
     mesh_array::TetrahedronAttribute<mesh_array::TetrahedronSurfaceInfo,mesh_array::T4Mesh> m_surface_map;
 
-    T                       m_mesh_radius;
-    T                       m_mesh_scale;
+    T                       m_static_radius;
 
   public:
 
@@ -59,8 +55,7 @@ namespace narrow
     , m_Y0()
     , m_Z0()
     , m_surface_map()
-    , m_mesh_radius( VT::zero() )
-    , m_mesh_scale(VT::zero() )
+    , m_static_radius( VT::zero() )
     {
     }
 
@@ -70,13 +65,12 @@ namespace narrow
     {
       if( this != &geo)
       {
-        this->m_mesh = geo.m_mesh;
-        this->m_X0 = geo.m_X0;
-        this->m_Y0 = geo.m_Y0;
-        this->m_Z0 = geo.m_Z0;
-        this->m_surface_map  = geo.m_surface_map;
-        this->m_mesh_radius = geo.m_mesh_scale;
-        this->m_mesh_scale = geo.m_mesh_scale;
+        this->m_mesh          = geo.m_mesh;
+        this->m_X0            = geo.m_X0;
+        this->m_Y0            = geo.m_Y0;
+        this->m_Z0            = geo.m_Z0;
+        this->m_surface_map   = geo.m_surface_map;
+        this->m_static_radius = geo.m_static_radius;
       }
       return *this;
     }
@@ -87,9 +81,6 @@ namespace narrow
     }
 
   public:
-
-
-    T get_scale() const { return m_mesh_scale; }
 
     void set_shape(
                    mesh_array::T4Mesh const & mesh
@@ -120,7 +111,7 @@ namespace narrow
                                       , m_surface_map
                                       );
 
-      m_mesh_radius = VT::zero();
+      m_static_radius = VT::zero();
 
       size_t const N = m_mesh.vertex_size();
 
@@ -136,10 +127,8 @@ namespace narrow
         min_coord = min(min_coord,r0);
         max_coord = max(max_coord,r0);
 
-        m_mesh_radius = max( m_mesh_radius, norm(r0) );
+        m_static_radius = max( m_static_radius, norm(r0) );
       }
-
-      m_mesh_scale = min(  max_coord-min_coord );
     }
 
 
@@ -156,14 +145,12 @@ namespace narrow
       m_surface_map.release();
 
       m_mesh.clear();
-      m_mesh_radius = VT::zero();
-      m_mesh_scale  = VT::zero();
+      m_static_radius = VT::zero();
     }
 
-
-    T const & get_radius() const
+    T const & get_static_radius() const
     {
-      return this->m_mesh_radius;
+      return this->m_static_radius;
     }
     
   };

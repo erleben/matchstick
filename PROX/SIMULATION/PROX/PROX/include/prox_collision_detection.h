@@ -91,8 +91,8 @@ namespace prox
         assert( this->m_body_j              || !"operator(): body j is null" );
         assert( this->m_results             || !"operator(): results is null");
         assert( tiny::norm(n) > VT::zero()  || !"operator(): normal is zero" );
-          
-          
+
+
         contact_type contact;
 
         contact.set_position( p );
@@ -164,20 +164,20 @@ namespace prox
         if(!geometry.has_shape() )
           continue;
 
-          narrow::UpdateWorkItem<tiny_types> work_item = narrow::UpdateWorkItem<tiny_types>(
-                                                                                                          *body
-                                                                                                          , geometry
-                                                                                                          , body->get_position()
-                                                                                                          , body->get_orientation()
-                                                                                                          );
-          kdop_bvh_update_work_pool.push_back( work_item );
+        narrow::UpdateWorkItem<tiny_types> work_item = narrow::UpdateWorkItem<tiny_types>(
+                                                                                          *body
+                                                                                          , geometry
+                                                                                          , body->get_position()
+                                                                                          , body->get_orientation()
+                                                                                          );
+        kdop_bvh_update_work_pool.push_back( work_item );
       }
       STOP_TIMER("kdop_work_pool_time");
 
       START_TIMER("kdop_update_time");
       if( ! kdop_bvh_update_work_pool.empty() )
       {
-          narrow::update_kdop_bvh(  kdop_bvh_update_work_pool );
+        narrow::update_kdop_bvh(  kdop_bvh_update_work_pool );
       }
       STOP_TIMER("kdop_update_time");
 
@@ -190,13 +190,8 @@ namespace prox
       //            phase system.
       broad_system.clear();
 
-      //--- Update body radius and connect their AABBs to the broad phase system -
       for(body_iterator body = bodies.begin(); body != bodies.end(); ++body)
       {
-        geometry_type const & geometry = narrow_system.get_geometry( body->get_geometry_idx() );
-
-        body->set_radius( geometry.get_radius() );
-
         // 2013-07-06 Kenny code review: Here we re-connect all bodies
         //            to the broad phase collision detection system.
         //            See my review comment above about efficiency.
@@ -208,7 +203,7 @@ namespace prox
       // algorithm is trying to run in O(n). Hence, one could argue that
       // a sweep-line algorithm would be better as its performance do
       // not depend on the obejct sizes.
-      broad_system.compute_optimal_cell_spacing(); 
+      broad_system.compute_optimal_cell_spacing();
 
       STOP_TIMER("preprocessing_time");
     }
@@ -224,11 +219,11 @@ namespace prox
 
       if( params.use_all_pair() )
       {
-         broad::find_overlaps( broad_system, overlaps, efficiency, broad::all_pair_algorithm() );
+        broad::find_overlaps( broad_system, overlaps, efficiency, broad::all_pair_algorithm() );
       }
       else
       {
-         broad::find_overlaps( broad_system, overlaps, efficiency, broad::grid_algorithm() );
+        broad::find_overlaps( broad_system, overlaps, efficiency, broad::grid_algorithm() );
       }
 
       STOP_TIMER("broad_time");

@@ -59,14 +59,6 @@ namespace prox
 
     narrow::update_kdop_bvh( kdop_bvh_update_work_pool );
 
-
-    for(body_iterator body = bodies.begin(); body != bodies.end(); ++body)
-    {
-      geometry_type const & geometry = narrow_system.get_geometry( body->get_geometry_idx() );
-
-      body->set_radius( geometry.get_radius() );
-    }
-
     //--- Test each body for intersection and find the "closest" one -----------
     size_t idx = 0u;
     for(body_iterator body = bodies.begin(); body != bodies.end(); ++body,++idx)

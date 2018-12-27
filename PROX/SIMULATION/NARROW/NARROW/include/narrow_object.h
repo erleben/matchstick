@@ -43,6 +43,8 @@ namespace narrow
 
     kdop::Tree<T,8> m_tree;                                     ///< kDOP BVH tree used for collision detection of deformed (spatial) mesh
 
+    T m_dynamic_radius;                                         ///< The current updated radius for the current deformed shape.
+
   protected:
     
     size_t           m_geometry_idx;  ///< A geometry index.
@@ -64,6 +66,18 @@ namespace narrow
         this->m_structure_map = structure_map;
     }
 
+    T const & get_dynamic_radius() const
+    {
+      return this->m_dynamic_radius;
+    }
+
+    void set_dynamic_radius(T const & value)
+    {
+      assert(value >= VT::zero() || !"set_dynamic_radius(): illegal radius value");
+
+      this->m_dynamic_radius = value;
+    }
+
   public:
 
     Object()
@@ -71,6 +85,7 @@ namespace narrow
     , m_Y()
     , m_Z()
     , m_tree()
+    , m_dynamic_radius( VT::zero() )
     , m_geometry_idx( 0u )
     {}
 
@@ -85,12 +100,13 @@ namespace narrow
     {
       if( this != &obj)
       {
-        this->m_X = obj.m_X;
-        this->m_Y = obj.m_Y;
-        this->m_Z = obj.m_Z;
-        this->m_tree             = obj.m_tree;
-        this->m_geometry_idx     = obj.m_geometry_idx;
-        this->m_structure_map    = obj.m_structure_map;
+        this->m_X                   = obj.m_X;
+        this->m_Y                   = obj.m_Y;
+        this->m_Z                   = obj.m_Z;
+        this->m_tree                = obj.m_tree;
+        this->m_geometry_idx        = obj.m_geometry_idx;
+        this->m_structure_map       = obj.m_structure_map;
+        this->m_dynamic_radius      = obj.m_dynamic_radius;
       }
       return *this;
     }
@@ -118,6 +134,8 @@ namespace narrow
       object.m_X.bind(geometry.m_mesh);
       object.m_Y.bind(geometry.m_mesh);
       object.m_Z.bind(geometry.m_mesh);
+
+      object.m_dynamic_radius = geometry.m_static_radius;
     }
   }
   
