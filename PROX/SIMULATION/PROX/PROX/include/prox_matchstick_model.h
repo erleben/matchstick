@@ -59,10 +59,13 @@ namespace prox
       real_type const cos_theta = tiny::clamp( tiny::inner_prod(Sa,SSb), -value_traits::one(), value_traits::one() );
       real_type const theta     = acos(cos_theta);
       
-      // TODO Check up on this equation?
       real_type const beta      = value_traits::one() - value_traits::two()*theta/value_traits::pi();
 
-      vector3_type const    C_iso = vector3_type::make(m_mu_isotropic,m_mu_isotropic,m_mu_isotropic);
+      vector3_type const    C_iso = vector3_type::make( m_mu_isotropic
+                                                       , m_mu_isotropic
+                                                       , m_mu_isotropic
+                                                       );
+
       vector3_type const &  C_an  = this->m_mu_anisotropic;
       vector3_type const    mu    = C_iso + beta * (C_an - C_iso);
 
@@ -125,6 +128,10 @@ namespace prox
                                                   , real_type const & mu_z
                                                   )
     {
+      assert(mu_x >= value_traits::zero() || !"set_coefficients_of_anisotropic_friction(): mu_x was negative");
+      assert(mu_y >= value_traits::zero() || !"set_coefficients_of_anisotropic_friction(): mu_y was negative");
+      assert(mu_z >= value_traits::zero() || !"set_coefficients_of_anisotropic_friction(): mu_z was negative");
+
       this->m_mu_anisotropic[0] = mu_x;
       this->m_mu_anisotropic[1] = mu_y;
       this->m_mu_anisotropic[2] = mu_z;

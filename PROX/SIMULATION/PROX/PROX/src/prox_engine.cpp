@@ -355,9 +355,9 @@ namespace prox
                                           , float const & dir_z
                                           )
   {
-    assert( m_data || !"internal error: null pointer");
-    assert( body_idx  < m_data->m_bodies.size() || !"internal error: index excedes allocated space for in material table");
-    assert( (is_number(dir_x) && is_number(dir_y) && is_number(dir_z)) || !"internal error: NaN or inf value");
+    assert( m_data                                                     || !"internal error: null pointer"                                       );
+    assert( body_idx  < m_data->m_bodies.size()                        || !"internal error: index excedes allocated space for in material table");
+    assert( (is_number(dir_x) && is_number(dir_y) && is_number(dir_z)) || !"internal error: NaN or inf value"                                   );
 
     EngineData::rigid_body_type       & body     = m_data->m_bodies[ body_idx ];
     size_t                      const & geo_idx  = body.get_geometry_idx();

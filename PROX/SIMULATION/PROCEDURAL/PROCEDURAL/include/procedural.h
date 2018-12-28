@@ -6,6 +6,7 @@
 #include <procedural_factory.h>
 #include <procedural_make_obj_packing.h>
 #include <procedural_make_grain_packing.h>
+#include <procedural_make_box_on_inclined_plane.h>
 
 #include <content.h>
 #include <mesh_array.h>
@@ -67,15 +68,6 @@ namespace procedural
                   , typename MT::vector3_type const & position
                   , typename MT::quaternion_type const & orientation
                   , typename MT::real_type const & pi_frac
-                  , MaterialInfo<typename MT::real_type> mat_info
-                  );
-
-  template<typename MT>
-  void make_slide_angle(  content::API * engine
-                  , typename MT::vector3_type const & position
-                  , typename MT::quaternion_type const & orientation
-                  , typename MT::real_type const & pi_frac
-                  , typename MT::real_type const & pi_frac_angle
                   , MaterialInfo<typename MT::real_type> mat_info
                   );
 

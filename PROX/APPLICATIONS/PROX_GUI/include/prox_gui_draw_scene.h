@@ -74,7 +74,7 @@ namespace prox_gui
       
       glm::mat4 const model_view_matrix =  view_matrix * object->m_model_matrix;
       
-      if(!draw_wireframe)
+      //if(!draw_wireframe)
       {
         for(int i=0u; i < number_of_shadows; ++i)
         {

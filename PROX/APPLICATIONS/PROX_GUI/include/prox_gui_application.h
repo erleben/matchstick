@@ -208,9 +208,30 @@ namespace prox_gui
 
       util::Log logging;
 
-      logging << "Rotate : hold down left mouse button" << util::Log::newline();
-      logging << "Dolly  : hold down middle mouse button" << util::Log::newline();
+      logging << "Rotate : hold down left mouse button"                 << util::Log::newline();
+      logging << "Dolly  : hold down middle mouse button"               << util::Log::newline();
       logging << "Pan    : press shift and hold down left mouse button" << util::Log::newline();
+      logging << "1      : load scene_01_box_on_inclined_plane.cfg"     << util::Log::newline();
+      logging << "2      : load scene_02_rolling_cylinder.cfg"          << util::Log::newline();
+      logging << "3      : load scene_03_arch.cfg"                      << util::Log::newline();
+      logging << "4      : load scene_04_stack.cfg"                     << util::Log::newline();
+      logging << "5      : load scene_05_capsule_hopper.cfg"            << util::Log::newline();
+      logging << "W      : Toggle draw wireframe"                       << util::Log::newline();
+      logging << "C      : Toggle draw contacts"                        << util::Log::newline();
+      logging << "A      : Toggle draw AABB"                            << util::Log::newline();
+      logging << "F      : Toggle framegrab"                            << util::Log::newline();
+      logging << "D      : Toggle draw debug"                           << util::Log::newline();
+      logging << "B      : Toggle save contact data"                    << util::Log::newline();
+      logging << "P      : Toggle xml play"                             << util::Log::newline();
+      logging << "R      : Toggle xml record"                           << util::Log::newline();
+      logging << "M      : Write matlab profiling data"                 << util::Log::newline();
+      logging << "L      : Load xml file"                               << util::Log::newline();
+      logging << "S      : Save xml file"                               << util::Log::newline();
+      logging << "V      : Save contact data"                           << util::Log::newline();
+      logging << "+      : Single step simulation"                      << util::Log::newline();
+      logging << "O      : Toggle orbit mode"                           << util::Log::newline();
+      logging << "I      : Toggle target locked mode"                   << util::Log::newline();
+      logging << "space  : Toggle run simulation"                       << util::Log::newline();
 
       glm::vec3 const position   = glm::vec3(0,0,20);
       glm::vec3 const target     = glm::vec3(0,0,0);
