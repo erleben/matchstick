@@ -271,27 +271,10 @@ namespace procedural
                 , typename MT::quaternion_type const & orientation
                 , MaterialInfo<typename MT::real_type> mat_info
                 , bool const fixed = false
-                , bool const blind_copy = false
                 , std::string const & material = "Stone"
                 , mesh_array::TetGenSettings = mesh_array::tetgen_default_settings()
                 );
 
-  template<typename MT>
-	void make_obj(
-                content::API * engine
-                , std::string const & name
-                , typename MT::real_type const & scale
-                , typename MT::vector3_type const & position
-                , typename MT::vector3_type const & structure_direction
-                , typename MT::quaternion_type const & orientation
-                , MaterialInfo<typename MT::real_type> mat_info
-                , bool const fixed = false
-                , bool const blind_copy = false
-                , std::string const & material = "Stone"
-                , mesh_array::TetGenSettings = mesh_array::tetgen_default_settings()
-                );
-
-  
   template<typename MT>
   void make_box(
                 content::API *  engine

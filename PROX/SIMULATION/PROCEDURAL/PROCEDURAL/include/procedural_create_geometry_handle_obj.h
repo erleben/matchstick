@@ -23,7 +23,6 @@ namespace procedural
                                                 content::API * engine
                                                 , std::string const & rel_file_name
                                                 , typename MT::real_type const & scale  = typename MT::value_traits::one()
-                                                , bool const & blind_copy = false
                                                 , mesh_array::TetGenSettings tetset  = mesh_array::tetgen_default_settings()
                                                 )
   {
@@ -42,7 +41,6 @@ namespace procedural
 
     mesh_array::read_obj(rel_file_name, data.m_mesh, data.m_X, data.m_Y, data.m_Z);
 
-    if(!blind_copy)
     {
       T max_x = VT::zero();
       T min_x = VT::zero();
@@ -79,7 +77,6 @@ namespace procedural
     mass::Properties<T> props    = mass::rotate_to_body_frame(props_mf);
 
     // Change geometry from model space to body space
-    if(!blind_copy)
     {
 
       V const d = - V::make(props_mf.m_x, props_mf.m_y, props_mf.m_z);
@@ -87,13 +84,6 @@ namespace procedural
 
       mesh_array::translate<MT>( d, data.m_mesh, data.m_X, data.m_Y, data.m_Z);
       mesh_array::rotate<MT>(conj(R), data.m_mesh, data.m_X, data.m_Y, data.m_Z);
-    }
-
-    if(blind_copy)
-    {
-      tetset.m_maximum_volume = 0;
-      tetset.m_quality_ratio = 0;
-      tetset.m_suppress_splitting = true;
     }
 
     mesh_array::T4Mesh volume;

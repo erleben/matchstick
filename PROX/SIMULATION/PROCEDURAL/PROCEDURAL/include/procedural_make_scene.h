@@ -155,22 +155,22 @@ namespace procedural
                                   engine, V::zero(), Q::identity(), mat_info, ground_size, 1.0f, ground_size
                                   );
 
-      if (structure_direction == 1)
-      {
-        procedural::make_obj<MT>(
-                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(0, 1, 0),
-                                 Q::Rz(VT::pi()), mat_info,
-                                 true, false, "Stone", tetset
-                                 );
-      }
-      else
-      {
-        procedural::make_obj<MT>(
-                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(1, 0, 0),
-                                 Q::Rz(VT::pi()), mat_info,
-                                 true, false, "Stone", tetset
-                                 );
-      }
+//      if (structure_direction == 1)
+//      {
+//        procedural::make_obj<MT>(
+//                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(0, 1, 0),
+//                                 Q::Rz(VT::pi()), mat_info,
+//                                 true, false, "Stone", tetset
+//                                 );
+//      }
+//      else
+//      {
+//        procedural::make_obj<MT>(
+//                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(1, 0, 0),
+//                                 Q::Rz(VT::pi()), mat_info,
+//                                 true, false, "Stone", tetset
+//                                 );
+//      }
 
 
       procedural::make_dropping_capsules<MT>(
