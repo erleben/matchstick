@@ -33,52 +33,6 @@ uniform int          number_of_lights;
 uniform LightInfo    lights[4];
 uniform MaterialInfo material;
 
-/**
- * @param P  surface point position in Eye frame
- * @param N  surface point normal in Eye frame
- */
-vec3 compute_light_intensity(LightInfo light, MaterialInfo model, vec3 P, vec3 N)
-{
-  // Light position in eye frame
-  vec3 S = vec3 (view_matrix * vec4 (light.position, 1.0));
-
-  // light direction in eye frame
-  vec3 D = vec3 (view_matrix * vec4 (normalize(light.target - light.position), 0.0));
-
-  float distance = length(S - P);
-
-  vec3 L = normalize (S - P);
-
-  float attenuation = 1.0 / (1.0 + light.attenuation * pow(distance, 2));
-
-  float light_angle = degrees( acos(dot(-L, D)));
-
-  if(light_angle > light.cutoff_angle )
-  {
-    attenuation = 0.0;
-  }
-
-  //--- Ambient intensity ------------------------------------------------------
-  vec3 La = light.Ia * model.Ka;
-
-  //--- Diffuse intensity ------------------------------------------------------
-  float diffuse_factor =  max (min ( dot (L, N), 1.0f), 0.0f);
-
-  vec3 Ld = light.Id * model.Kd * diffuse_factor;
-
-  //---- Specular intensity ----------------------------------------------------
-  vec3 R = reflect (-L, N);
-  vec3 V = normalize (-P);
-
-  float specular_factor = pow ( max( dot (R, V), 0.0) , model.specular_exponent);
-
-  vec3 Ls = light.Is * model.Ks * specular_factor;
-
-  //--- Final intensity ------------------------------------------------------------
-  return ( attenuation*(Ls + Ld) + La );
-}
-
-
 float wire_edge_factor()
 {
   vec3 d = fwidth(v_bary_coord);
@@ -90,17 +44,86 @@ float wire_edge_factor()
   return min(min(a3.x, a3.y), a3.z);
 }
 
+/**
+ * @param P  surface point position in Eye frame
+ * @param N  surface point normal in Eye frame
+ */
+vec3 compute_light_intensity(
+int light_source
+, MaterialInfo model
+, vec3 P
+, vec3 N
+)
+{
+  LightInfo light = lights[light_source];
+  
+  // Light position in eye frame
+  vec3 S = vec3 (view_matrix * vec4 (light.position, 1.0));
+  
+  // light direction in eye frame
+  vec3 D = vec3 (view_matrix * vec4 (normalize(light.target - light.position), 0.0));
+  
+  float distance = length(S - P);
+  
+  vec3 L = normalize (S - P);
+  
+  //--- Ambient intensity ------------------------------------------------------
+  vec3 La = light.Ia * model.Ka;
+  
+  //--- Diffuse intensity ------------------------------------------------------
+  float diffuse_factor =  max (min ( dot (L, N), 1.0f), 0.0f);
+  
+  vec3 Ld = light.Id * model.Kd * diffuse_factor;
+  
+  //---- Specular intensity ----------------------------------------------------
+  vec3 R = reflect (-L, N);
+  vec3 V = normalize (-P);
+  
+  float specular_factor = pow ( max( dot (R, V), 0.0) , model.specular_exponent);
+  
+  vec3 Ls = light.Is * model.Ks * specular_factor;
+  
+  //--- Splot light cone and shadows
+  
+  float attenuation = 1.0 / (1.0 + light.attenuation * pow(distance, 2));
+  
+  float light_angle = degrees( acos(dot(-L, D)));
+  
+  float visibility = 1.0;
+  
+  if(light_angle > light.cutoff_angle )
+  {
+    attenuation = 0.0;
+  }
+  else
+  {
+      visibility = 0.5;
+  }
+  
+  //--- Final intensity ------------------------------------------------------------
+  return ( visibility*attenuation*(Ls + Ld) + La );
+}
+
 void main()
 {
   MaterialInfo model = material;
-
+  
   vec3 accum = vec3(0.0,0.0,0.0);
+  
   for (int i=0; i<number_of_lights; ++i)
   {
-    vec3 color = compute_light_intensity(lights[i], model, v_position_eye, v_normal_eye);
+    vec3 color = compute_light_intensity(
+    i
+    , model
+    , v_position_eye
+    , v_normal_eye
+    );
     accum = accum + color;
   }
-
+    
   frag_color = vec4( mix(wire_color, accum, wire_edge_factor()), 1.0 );
 }
+
+
+
 
