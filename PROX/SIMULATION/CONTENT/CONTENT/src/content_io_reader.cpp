@@ -309,7 +309,7 @@ namespace content
       size_t first_idx  = data.get_idx_from_name( first_material ); 
       size_t second_idx = data.get_idx_from_name( second_material ); 
 
-      data.input()->create_material_property( first_idx, second_idx );
+      data.input()->create_contact_model( first_idx, second_idx );
       data.input()->set_coefficients_of_anisotropic_friction( first_idx, second_idx, mu_ani_x, mu_ani_y, mu_ani_z );
       data.input()->set_coefficient_of_isotropic_friction( first_idx, second_idx, mu_iso );
       data.input()->set_coefficient_of_restitution( first_idx, second_idx, e );
@@ -738,14 +738,14 @@ namespace content
       TiXmlElement const * materials  = get_singleton_child( tag, "materials" );
       if( materials )
       {
-        TiXmlElement const * properties = get_singleton_child( materials, "properties" );
+        TiXmlElement const * properties = get_singleton_child( materials, "models" );
         
         if ( !read_collection( materials , "material", &read_material, data  ) ) 
           return false;
         
         assert(properties || !"properties tag was missing");
         
-        if ( !read_collection( properties , "property", &read_property, data  ) ) 
+        if ( !read_collection( properties , "model", &read_property, data  ) )
           return false;
       }
       

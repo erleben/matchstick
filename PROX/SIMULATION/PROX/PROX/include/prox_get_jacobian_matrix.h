@@ -17,7 +17,7 @@ namespace prox
                                   contact_iterator begin
                                   , contact_iterator end
                                   , body_container const & bodies
-                                  , std::vector< std::vector< MatchStickModel< math_policy > > > const &  properties
+                                  , std::vector< std::vector< MatchStickModel< math_policy > > > const &  contact_models
                                   , typename math_policy::compressed4x6_type & J
                                   , math_policy const & /*tag*/ 
                                   , size_t const K
@@ -27,7 +27,7 @@ namespace prox
     typedef typename math_policy::quaternion_type    quaternion_type;
     typedef typename math_policy::block4x6_type      block4x6_type;
 
-    typedef          MatchStickModel< math_policy >         property_type;
+    typedef          MatchStickModel< math_policy >  contact_model_type;
 
     size_t const N = bodies.size();
     
@@ -47,7 +47,7 @@ namespace prox
       size_t const mat_i = contact->get_body_i()->get_material_idx();
       size_t const mat_j = contact->get_body_j()->get_material_idx();
 
-      property_type const * property =  &(properties[mat_i][mat_j]);
+      contact_model_type const * model =  &(contact_models[mat_i][mat_j]);
 
       // Transform material structure directions from local model frames into
       // world coordinate system using body orientations.
@@ -60,7 +60,7 @@ namespace prox
 
       // Ask the material how the contact frame is oriented for these
       // values of structure directions.
-      property->compute_contact_frame(Sa, Sb, s_k, t_k, n_k);
+      model->compute_contact_frame(Sa, Sb, s_k, t_k, n_k);
 
       // Update contact info with world coordinate information
       contact->set_Sa(Sa);

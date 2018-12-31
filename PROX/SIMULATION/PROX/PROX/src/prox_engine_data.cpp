@@ -20,7 +20,7 @@ namespace prox
   , m_contacts()
   , m_broad()
   , m_narrow()
-  , m_property_counter(0u)
+  , m_contact_model_counter(0u)
   , m_time_step(0.01f)
   , m_time(0.0f)
   , m_params()
@@ -43,20 +43,20 @@ namespace prox
     m_narrow.clear();
     m_geometry_names.clear();
     m_materials.clear();
-    m_property_counter = 0u;
+    m_contact_model_counter = 0u;
     m_time      = 0.0f;
     m_time_step = 0.01f;
     m_params = params_type();
 
-    m_properties.resize(m_number_of_materials);
+    m_contact_models.resize(m_number_of_materials);
 
     for (size_t i = 0u; i < m_number_of_materials; ++i)
     {
-      m_properties[i].resize(m_number_of_materials);
+      m_contact_models[i].resize(m_number_of_materials);
 
       for (size_t j = 0u; j < m_number_of_materials; ++j)
       {
-        m_exist_property[i][j] = false;
+        m_exist_model[i][j] = false;
       }
     }
 
@@ -83,7 +83,7 @@ namespace prox
     
     stepper_binder_type stepper = prox::bind_stepper< MT >( m_params.stepper_params().stepper() );
     
-    stepper( dt, m_bodies, m_properties, m_gravity, m_damping, m_params, m_broad, m_narrow, m_contacts, MT() );
+    stepper( dt, m_bodies, m_contact_models, m_gravity, m_damping, m_params, m_broad, m_narrow, m_contacts, MT() );
 
     T E_kinetic;
     T E_potential;

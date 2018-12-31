@@ -248,7 +248,7 @@ namespace prox
     return idx;
   }
   
-  void Engine::create_material_property(  size_t const & first_idx
+  void Engine::create_contact_model(  size_t const & first_idx
                                         , size_t const & second_idx)
   {
     assert( m_data || !"internal error: null pointer");
@@ -256,18 +256,18 @@ namespace prox
     assert( second_idx < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     
     
-    bool exist = m_data->m_exist_property[first_idx][second_idx];
+    bool exist = m_data->m_exist_model[first_idx][second_idx];
     
     assert( !exist || !"internal error: material was already created?");
     
-    EngineData::property_type P = EngineData::property_type();
+    EngineData::contact_model_type model = EngineData::contact_model_type();
     
-    m_data->m_properties[first_idx][second_idx] = P;
-    m_data->m_properties[second_idx][first_idx] = P;
+    m_data->m_contact_models[first_idx][second_idx] = model;
+    m_data->m_contact_models[second_idx][first_idx] = model;
     
-    m_data->m_exist_property[first_idx][second_idx] = true;
+    m_data->m_exist_model[first_idx][second_idx] = true;
     
-    m_data->m_property_counter++;
+    m_data->m_contact_model_counter++;
   }
 
   void Engine::set_coefficients_of_anisotropic_friction(
@@ -283,8 +283,8 @@ namespace prox
     assert( second_idx < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( (is_number(mu_x) && is_number(mu_y) && is_number(mu_z)) || !"internal error: NaN or inf value");
     
-    m_data->m_properties[first_idx][second_idx].set_coefficients_of_anisotropic_friction( mu_x, mu_y, mu_z );
-    m_data->m_properties[second_idx][first_idx].set_coefficients_of_anisotropic_friction( mu_x, mu_y, mu_z );
+    m_data->m_contact_models[first_idx][second_idx].set_coefficients_of_anisotropic_friction( mu_x, mu_y, mu_z );
+    m_data->m_contact_models[second_idx][first_idx].set_coefficients_of_anisotropic_friction( mu_x, mu_y, mu_z );
   }
 
   void Engine::set_coefficient_of_isotropic_friction(
@@ -298,8 +298,8 @@ namespace prox
     assert( second_idx < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( is_number(mu) || !"internal error: NaN or inf value");
 
-    m_data->m_properties[first_idx][second_idx].set_coefficient_of_isotropic_friction( mu );
-    m_data->m_properties[second_idx][first_idx].set_coefficient_of_isotropic_friction( mu );
+    m_data->m_contact_models[first_idx][second_idx].set_coefficient_of_isotropic_friction( mu );
+    m_data->m_contact_models[second_idx][first_idx].set_coefficient_of_isotropic_friction( mu );
   }
 
   void Engine::set_material_structure_map(
@@ -447,8 +447,8 @@ namespace prox
     assert( second_idx < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( is_number(e) || !"internal error: NaN or inf value");
     
-    m_data->m_properties[first_idx][second_idx].set_coefficient_of_restitution( e );
-    m_data->m_properties[second_idx][first_idx].set_coefficient_of_restitution( e );
+    m_data->m_contact_models[first_idx][second_idx].set_coefficient_of_restitution( e );
+    m_data->m_contact_models[second_idx][first_idx].set_coefficient_of_restitution( e );
   }
   /// materials
   
@@ -819,13 +819,13 @@ namespace prox
     }
   }
   
-  size_t Engine::get_number_of_properties()
+  size_t Engine::get_number_of_contact_models()
   {
     assert( m_data || !"internal error: null pointer");
-    return m_data->m_property_counter;
+    return m_data->m_contact_model_counter;
   }
   
-  void Engine::get_material_property_indices(  size_t * first_index_array
+  void Engine::get_contact_model_material_indices(  size_t * first_index_array
                                              , size_t * second_index_array
                                              )
   {
@@ -836,7 +836,7 @@ namespace prox
     {
       for (size_t second_idx = 0; second_idx < m_number_of_materials; ++second_idx)
       {
-        if (m_data->m_exist_property[first_idx][second_idx])
+        if (m_data->m_exist_model[first_idx][second_idx])
         {
           first_index_array[p]  = first_idx;
           second_index_array[p] = second_idx;
@@ -859,7 +859,7 @@ namespace prox
     assert( first_index  < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( second_index < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     
-    V const mu = m_data->m_properties[first_index][second_index].get_coefficients_of_anisotropic_friction();
+    V const mu = m_data->m_contact_models[first_index][second_index].get_coefficients_of_anisotropic_friction();
 
     mu_x = mu(0);
     mu_y = mu(1);
@@ -876,7 +876,7 @@ namespace prox
     assert( first_index  < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( second_index < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
 
-    mu = m_data->m_properties[first_index][second_index].get_coefficient_of_isotropic_friction();
+    mu = m_data->m_contact_models[first_index][second_index].get_coefficient_of_isotropic_friction();
   }
 
   float Engine::get_coefficient_of_restitution( size_t const & first_index
@@ -887,7 +887,7 @@ namespace prox
     assert( first_index  < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     assert( second_index < m_number_of_materials || !"internal error: index excedes allocated space for in material table");
     
-    return m_data->m_properties[first_index][second_index].get_coefficient_of_restitution();
+    return m_data->m_contact_models[first_index][second_index].get_coefficient_of_restitution();
   }
   
   size_t Engine::get_number_of_geometries()

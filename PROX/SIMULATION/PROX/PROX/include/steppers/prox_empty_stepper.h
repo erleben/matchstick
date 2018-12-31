@@ -25,7 +25,7 @@ namespace prox
   inline void empty_stepper(
                             typename M::real_type const & dt
                             , std::vector< RigidBody< M > > & bodies
-                            , std::vector< std::vector< MatchStickModel< M > > > const &  properties
+                            , std::vector< std::vector< MatchStickModel< M > > > const &  contact_models
                             , Gravity< M > const & gravity
                             , Damping< M > const & damping
                             , Params<M> const & params

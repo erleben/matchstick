@@ -43,12 +43,12 @@ namespace content
     virtual size_t create_material( std::string const & name ) = 0;
     
     /**
-     * Create material properties between a pair of materials.
+     * Create contact model between a pair of materials.
      *
      * @param first_idx    The index value of the first material
      * @param second_idx   The index value of the second material
      */
-    virtual void create_material_property( size_t const & first_idx, size_t const & second_idx) = 0;
+    virtual void create_contact_model( size_t const & first_idx, size_t const & second_idx) = 0;
     
     /**
      * Create Collision Geometry.

@@ -13,7 +13,7 @@ namespace prox
   inline void get_restitution_vector( 
                                      contact_iterator begin
                                      , contact_iterator end
-                                     , std::vector< std::vector< MatchStickModel< math_policy > > > const &  properties
+                                     , std::vector< std::vector< MatchStickModel< math_policy > > > const &  contact_models
                                      , typename math_policy::vector4_type & e
                                      , math_policy const & /*tag*/ 
                                      , size_t const K
@@ -35,7 +35,7 @@ namespace prox
       size_t const material_i = contact->get_body_i()->get_material_idx();
       size_t const material_j = contact->get_body_j()->get_material_idx();
       
-      real_type e_k = properties[material_i][material_j].get_coefficient_of_restitution();
+      real_type e_k = contact_models[material_i][material_j].get_coefficient_of_restitution();
       
       block4x1_type & b = e( k );
       

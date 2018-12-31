@@ -47,7 +47,7 @@ namespace prox
   inline void semi_implicit_time_stepper( 
                                           typename M::real_type const & dt
                                          , std::vector< RigidBody< M > > & bodies
-                                         , std::vector< std::vector< MatchStickModel< M > > > const &  properties
+                                         , std::vector< std::vector< MatchStickModel< M > > > const &  contact_models
                                          , Gravity< M > const & gravity
                                          , Damping< M > const & damping
                                          , Params<M> const & params
@@ -149,7 +149,7 @@ namespace prox
                                           contacts.begin()
                                           , contacts.end()
                                           , bodies
-                                          , properties
+                                          , contact_models
                                           , J
                                           , tag
                                           , number_of_contacts
@@ -180,7 +180,7 @@ namespace prox
         get_restitution_vector(
                                contacts.begin()
                                , contacts.end()
-                               , properties
+                               , contact_models
                                , e
                                , tag
                                , number_of_contacts
@@ -194,7 +194,7 @@ namespace prox
       get_friction_coefficient_vector(
                                       contacts.begin()
                                       , contacts.end()
-                                      , properties
+                                      , contact_models
                                       , mu
                                       , tag
                                       , number_of_contacts

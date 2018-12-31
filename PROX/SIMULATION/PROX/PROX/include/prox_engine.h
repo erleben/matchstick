@@ -148,7 +148,7 @@ namespace prox
 
     size_t create_material( std::string const & name );
     
-    void create_material_property( size_t const & first_idx, size_t const & second_idx);
+    void create_contact_model( size_t const & first_idx, size_t const & second_idx);
     
 
     void set_coefficients_of_anisotropic_friction( size_t const & first_idx
@@ -263,9 +263,9 @@ namespace prox
     
     void get_material_indices( size_t * index_array );
     
-    size_t get_number_of_properties();
+    size_t get_number_of_contact_models();
     
-    void get_material_property_indices(  size_t * first_index_array
+    void get_contact_model_material_indices(  size_t * first_index_array
                                        , size_t * second_index_array
                                        );
 

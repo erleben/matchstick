@@ -91,24 +91,24 @@ namespace content
       virtual void get_material_indices( size_t * index_array ) = 0;
       
       /**
-       * Get Number of Material Properties.
+       * Get Number of Contact Models.
        *
-       * @return    The number of defined material properties.
+       * @return    The number of defined contact models.
        */
-      virtual size_t get_number_of_properties() = 0;
+      virtual size_t get_number_of_contact_models() = 0;
       
       /**
-       * Get Material Property Indices.
-       * A material property is defined uniquely by a pair of un-ordered material indices. 
+       * Get Material Indices of Contact Model.
+       * A contact model is defined uniquely by a pair of un-ordered material indices.
        *
        * @param first_index_array     Upon return this array will hold the indices of all
        *                            the first materials. The array must be pre-allocated by the caller
-       *                            and must contain at least 'get_number_of_properties()' entries.
+       *                            and must contain at least 'get_number_of_contact_models()' entries.
        * @param second_index_array    Upon return this array will hold the indices of all
        *                            the first materials. The array must be pre-allocated by the caller
-       *                            and must contain at least 'get_number_of_properties()' entries.
+       *                            and must contain at least 'get_number_of_contact_models()' entries.
        */
-      virtual void get_material_property_indices(  size_t * first_index_array
+      virtual void get_contact_model_material_indices(  size_t * first_index_array
                                                  , size_t * second_index_array 
                                                  ) = 0;
 

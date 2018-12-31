@@ -37,7 +37,7 @@ namespace prox
     typedef prox::RigidBody< MT >              rigid_body_type;
     typedef prox::ContactPoint< MT >           contact_type;
     typedef narrow::Geometry< TT >             geometry_type;
-    typedef prox::MatchStickModel< MT >               property_type;
+    typedef prox::MatchStickModel< MT >        contact_model_type;
     typedef prox::Params< MT >                 params_type;
     typedef prox::ForceCallback<MT>            force_callback;
 
@@ -54,11 +54,11 @@ namespace prox
     broad_phase_type                 m_broad;
     narrow_phase_type                m_narrow;
 
-    size_t                           m_property_counter;
+    size_t                           m_contact_model_counter;
     
-    std::vector< std::vector< property_type > > m_properties;
+    std::vector< std::vector< contact_model_type > > m_contact_models;
 
-    bool                             m_exist_property[m_number_of_materials][m_number_of_materials];
+    bool                             m_exist_model[m_number_of_materials][m_number_of_materials];
     float                            m_time_step;
     float                            m_time;      ///< Simulated time
     

@@ -123,15 +123,15 @@ namespace content
       }
       // Add properties to materials
       {
-        TiXmlElement * properties      = new TiXmlElement( "properties" );
+        TiXmlElement * properties      = new TiXmlElement( "models" );
         materials->LinkEndChild(properties);
         
-        size_t N = data.output()->get_number_of_properties();
+        size_t N = data.output()->get_number_of_contact_models();
         std::vector<size_t> first_indices;
         std::vector<size_t> second_indices;
         first_indices.resize( N );
         second_indices.resize( N );
-        data.output()->get_material_property_indices( &first_indices[0], &second_indices[0] );
+        data.output()->get_contact_model_material_indices( &first_indices[0], &second_indices[0] );
         
         for(size_t i = 0;i<N;++i)
         {
@@ -140,7 +140,7 @@ namespace content
           std::string const first_name  = get_material_name(  first_idx, data);
           std::string const second_name = get_material_name( second_idx, data);
           
-          TiXmlElement * property = new TiXmlElement( "property" );
+          TiXmlElement * property = new TiXmlElement( "model" );
           property->SetAttribute( "materials", "("+ first_name+","+second_name+")" );
           
           float e     = data.output()->get_coefficient_of_restitution( first_idx, second_idx );

@@ -22,7 +22,7 @@ namespace procedural
     
     //--- Dummy values till we get more 'correct' ones, drilling is not actually implemented
     T const drilling_dummy    = VT::numeric_cast(0.01f); // set dummy different from zero, as prox_numerical_ellipsoid requires nonzero coefficents
-
+    
     //instantiating the three different material types
     mat_info.m_stone_mid      = engine->create_material("Stone");
     mat_info.m_ground_mid     = engine->create_material("Ground");
@@ -34,13 +34,13 @@ namespace procedural
     
     //--- Coupling pairs of materials, dry sliding friction
     //--- Coefficients taken from http://www.supercivilcd.com/FRICTION.htm
-
+    
     //--- Brick on rock = 0.75
-    engine->create_material_property(
-                                     mat_info.m_stone_mid
-                                     , mat_info.m_ground_mid
-                                     );
-
+    engine->create_contact_model(
+                                 mat_info.m_stone_mid
+                                 , mat_info.m_ground_mid
+                                 );
+    
     engine->set_coefficients_of_anisotropic_friction(
                                                      mat_info.m_stone_mid
                                                      , mat_info.m_ground_mid
@@ -48,32 +48,32 @@ namespace procedural
                                                      , 0.75f
                                                      , drilling_dummy
                                                      );
-
+    
     engine->set_coefficient_of_isotropic_friction(
                                                   mat_info.m_stone_mid
                                                   , mat_info.m_ground_mid
                                                   , 0.75f
                                                   );
-
+    
     engine->set_coefficient_of_restitution(
                                            mat_info.m_stone_mid
                                            , mat_info.m_ground_mid
                                            , 0.3f
                                            );
-
-
+    
+    
     //--- Concrete to steel = 0.45
-    engine->create_material_property(
-                                     mat_info.m_stone_mid
-                                     , mat_info.m_cannonball_mid
-                                     );
-
+    engine->create_contact_model(
+                                 mat_info.m_stone_mid
+                                 , mat_info.m_cannonball_mid
+                                 );
+    
     engine->set_coefficient_of_isotropic_friction(
                                                   mat_info.m_stone_mid
                                                   , mat_info.m_cannonball_mid
                                                   , 0.45f
                                                   );
-
+    
     engine->set_coefficients_of_anisotropic_friction(
                                                      mat_info.m_stone_mid
                                                      , mat_info.m_cannonball_mid
@@ -81,25 +81,25 @@ namespace procedural
                                                      , 0.45f
                                                      , drilling_dummy
                                                      );
-
+    
     engine->set_coefficient_of_restitution(
                                            mat_info.m_stone_mid
                                            , mat_info.m_cannonball_mid
                                            , 0.8f
                                            );
-
+    
     //--- Brick on brick = 0.65
-    engine->create_material_property(
-                                     mat_info.m_stone_mid
-                                     , mat_info.m_stone_mid
-                                     );
-
+    engine->create_contact_model(
+                                 mat_info.m_stone_mid
+                                 , mat_info.m_stone_mid
+                                 );
+    
     engine->set_coefficient_of_isotropic_friction(
                                                   mat_info.m_stone_mid
                                                   , mat_info.m_stone_mid
                                                   , 0.65f
                                                   );
-
+    
     engine->set_coefficients_of_anisotropic_friction(
                                                      mat_info.m_stone_mid
                                                      , mat_info.m_stone_mid
@@ -107,25 +107,25 @@ namespace procedural
                                                      , 0.65f
                                                      , drilling_dummy
                                                      );
-
+    
     engine->set_coefficient_of_restitution(
                                            mat_info.m_stone_mid
                                            , mat_info.m_stone_mid
                                            , 0.7f
                                            );
-
+    
     //--- Concrete to steel = 0.45
-    engine->create_material_property(
-                                     mat_info.m_cannonball_mid
-                                     , mat_info.m_ground_mid
-                                     );
-
+    engine->create_contact_model(
+                                 mat_info.m_cannonball_mid
+                                 , mat_info.m_ground_mid
+                                 );
+    
     engine->set_coefficient_of_isotropic_friction(
                                                   mat_info.m_cannonball_mid
                                                   , mat_info.m_ground_mid
                                                   , 0.45f
                                                   );
-
+    
     engine->set_coefficients_of_anisotropic_friction(
                                                      mat_info.m_cannonball_mid
                                                      , mat_info.m_ground_mid
@@ -133,25 +133,25 @@ namespace procedural
                                                      , 0.45f
                                                      , drilling_dummy
                                                      );
-
+    
     engine->set_coefficient_of_restitution(
                                            mat_info.m_cannonball_mid
                                            , mat_info.m_ground_mid
                                            , 0.3f
                                            );
-
+    
     //--- Steel to steel = 0.3
-    engine->create_material_property(
-                                     mat_info.m_cannonball_mid
-                                     , mat_info.m_cannonball_mid
-                                     );
-
+    engine->create_contact_model(
+                                 mat_info.m_cannonball_mid
+                                 , mat_info.m_cannonball_mid
+                                 );
+    
     engine->set_coefficient_of_isotropic_friction(
                                                   mat_info.m_cannonball_mid
                                                   , mat_info.m_cannonball_mid
                                                   , 0.3f
                                                   );
-
+    
     engine->set_coefficients_of_anisotropic_friction(
                                                      mat_info.m_cannonball_mid
                                                      , mat_info.m_cannonball_mid
@@ -159,19 +159,19 @@ namespace procedural
                                                      , 0.3f
                                                      , drilling_dummy
                                                      );
-
+    
     engine->set_coefficient_of_restitution(
                                            mat_info.m_cannonball_mid
                                            , mat_info.m_cannonball_mid
                                            , 0.9f
                                            );
-
+    
     return mat_info;
   }
   
   typedef tiny::MathTypes<float> MTf;
-
+  
   template
   MaterialInfo<MTf::real_type> create_material_info<MTf>( content::API * engine );
-
+  
 } //namespace procedural
