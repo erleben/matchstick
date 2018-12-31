@@ -65,7 +65,6 @@ namespace prox
     }
 
     /**
-     *
      * Overloaded version. The only purpose of this version is
      * such that all sub solvers have the same function signature.
      */

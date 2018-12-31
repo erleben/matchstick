@@ -16,14 +16,12 @@ namespace prox
     * This function sets up a polynomial and solves analytically
     * for the roots of the polynomial.
     */
-
     template <typename T>
     inline static void analytical_ellipsoid(
                                               T const & z_s
                                               , T const & z_t
                                               , T const & z_tau
-                                              , T const & mu_s
-                                              , T const & mu_t
+                                              , T const & mu_planar
                                               , T const & mu_tau
                                               , T const & lambda_n
                                               , T & lambda_s
@@ -41,7 +39,7 @@ namespace prox
         return;
       }
 
-      T const a = mu_s*lambda_n;
+      T const a = mu_planar*lambda_n;
       T const b = a;
       T const c = mu_tau*lambda_n;
 
@@ -93,10 +91,10 @@ namespace prox
       //
       // making the subsitution t = 2 alpha we have
       //
-      //u_t
       //   (a^2 + t)^2(c^2 + t)^2  - a^2 (z_s^2+z_t^2)(a^2 + t)^2 -  c^2 (z_tau^2)(a^2 + t)^2 = 0
       //
       //      a4 t^4 + a3 t^3 + a2 t^2 + a1 t^1 + a0 = 0
+      //
       // where
       //
       //    a4 = 1
@@ -144,6 +142,38 @@ namespace prox
       lambda_s   = (a*a*z_s)  / (a*a + t);
       lambda_t   = (b*b*z_t)  / (b*b + t);
       lambda_tau = (c*c*z_tau)/ (c*c + t);
+    }
+
+  
+    /**
+     * Overloaded version. The only purpose of this version is
+     * such that all sub solvers have the same function signature.
+     */
+    template <typename T>
+    inline static void analytical_ellipsoid(
+                                            T const & z_s
+                                            , T const & z_t
+                                            , T const & z_tau
+                                            , T const & mu_s
+                                            , T const & /*mu_t*/
+                                            , T const & mu_tau
+                                            , T const & lambda_n
+                                            , T & lambda_s
+                                            , T & lambda_t
+                                            , T & lambda_tau
+                                            )
+    {
+      analytical_ellipsoid(
+                           z_s
+                           , z_t
+                           , z_tau
+                           , mu_s
+                           , mu_tau
+                           , lambda_n
+                           , lambda_s
+                           , lambda_t
+                           , lambda_tau
+                           );
     }
 
   } // namespace detail
