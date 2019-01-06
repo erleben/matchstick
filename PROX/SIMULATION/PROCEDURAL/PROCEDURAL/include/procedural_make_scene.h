@@ -70,6 +70,7 @@ namespace procedural
                                   , length*1.2f
                                   , 1.0f
                                   , length/3.0f
+                                  , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
       
       procedural::make_box_on_inclined_plane<MT>(
@@ -114,6 +115,7 @@ namespace procedural
                                   , length*1.2f
                                   , 1.0f
                                   , length/3.0f
+                                  , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
       
       procedural::make_cylinder_on_inclined_plane<MT>(
@@ -134,18 +136,45 @@ namespace procedural
     }
     if (scene.compare("arch") == 0)
     {
+      float const r_outer           = util::to_value<float>(params.get_value("procedural_param_1", "2.0"));
+      float const r_inner           = util::to_value<float>(params.get_value("procedural_param_2", "1.5"));
+      float const pillar_height     = util::to_value<float>(params.get_value("procedural_param_3", "2.0"));
+      float const stone_depth       = util::to_value<float>(params.get_value("procedural_param_4", "2.0"));
+      size_t const arch_slices      = util::to_value<size_t>(params.get_value("procedural_param_5", "7"));
+      size_t const pillar_segments  = util::to_value<size_t>(params.get_value("procedural_param_6", "3"));
+      float const structure_field_x = util::to_value<float>(params.get_value("procedural_param_7", "1.0"));
+      float const structure_field_y = util::to_value<float>(params.get_value("procedural_param_8", "0.0"));
+      float const structure_field_z = util::to_value<float>(params.get_value("procedural_param_9", "0.0"));
+      float const mu_iso            = util::to_value<float>(params.get_value("procedural_param_10", "1.0"));
+      float const mu_ani_x          = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
+      float const mu_ani_y          = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
+      float const mu_ani_z          = util::to_value<float>(params.get_value("procedural_param_13", "1.0"));
+      
+      // Has structural field in x-direction
       procedural::make_ground<MT>(
-                                  engine, V::zero(), Q::identity(), mat_info, 10.0f, 1.0f, 10.0f
+                                  engine
+                                  , V::zero()
+                                  , Q::identity()
+                                  , mat_info
+                                  , 10.0f, 1.0f, 10.0f
+                                  , 1.0, 0.0, 0.0
                                   );
 
       procedural::make_arch<MT>(
                                 engine, V::zero(), Q::identity()
-                                , 2      // r outer
-                                , 1.5    // r inner
-                                , 2      // pillar height
-                                , 2.0    // stone depth
-                                , 7      // arch slices
-                                , 3      // pillar segments
+                                , r_outer
+                                , r_inner
+                                , pillar_height
+                                , stone_depth
+                                , arch_slices
+                                , pillar_segments
+                                , structure_field_x
+                                , structure_field_y
+                                , structure_field_z
+                                , mu_iso
+                                , mu_ani_x
+                                , mu_ani_y
+                                , mu_ani_z
                                 , mat_info
                                 );
 
@@ -154,6 +183,7 @@ namespace procedural
     {
       procedural::make_ground<MT>(
                                   engine, V::zero(), Q::identity(), mat_info, 10.0f, 1.0f, 10.0f
+                                  , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
 
       unsigned int const layers = util::to_value<unsigned int>(params.get_value("procedural_param_1", "5"));
@@ -177,6 +207,7 @@ namespace procedural
 
       procedural::make_ground<MT>(
                                   engine, V::zero(), Q::identity(), mat_info, ground_size, 1.0f, ground_size
+                                  , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
 
 //      if (structure_direction == 1)

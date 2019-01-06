@@ -6,8 +6,10 @@
 #include <procedural_factory.h>
 #include <procedural_make_obj_packing.h>
 #include <procedural_make_grain_packing.h>
+
 #include <procedural_make_box_on_inclined_plane.h>
 #include <procedural_make_cylinder_on_inclined_plane.h>
+#include <procedural_make_arch.h>
 
 #include <content.h>
 #include <mesh_array.h>
@@ -16,20 +18,7 @@
 
 namespace procedural
 {
-	
-  template<typename MT>
-	void make_arch(  content::API * engine
-                 , typename MT::vector3_type const& position
-                 , typename MT::quaternion_type const & orientation
-                 , typename MT::real_type const & r_outer
-                 , typename MT::real_type const & r_inner
-                 , typename MT::real_type const & pillar_height
-                 , typename MT::real_type const & stone_depth
-                 , size_t const & arch_slices
-                 , size_t const & pillar_segments
-                 , MaterialInfo<typename MT::real_type> mat_info
-                 );
-	
+  
   template<typename MT>
 	void make_cannonball(  content::API * engine
                          , typename MT::real_type         const & radius
@@ -114,6 +103,9 @@ namespace procedural
                    , typename MT::real_type const & width
                    , typename MT::real_type const & height
                    , typename MT::real_type const & depth
+                   , typename MT::real_type const & sx
+                   , typename MT::real_type const & sy
+                   , typename MT::real_type const & sz
                    );
 	
   template<typename MT>

@@ -21,7 +21,7 @@ namespace procedural
    *                                 the box given in the body frame coordinate system.
    */
   template<typename MT>
-  void make_box_on_inclined_plane(
+  inline void make_box_on_inclined_plane(
                                   content::API * engine
                                   , typename MT::vector3_type const & position
                                   , typename MT::quaternion_type const & orientation

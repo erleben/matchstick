@@ -13,6 +13,9 @@ namespace procedural
                    , typename MT::real_type const & width
                    , typename MT::real_type const & height
                    , typename MT::real_type const & depth
+                   , typename MT::real_type const & sx
+                   , typename MT::real_type const & sy
+                   , typename MT::real_type const & sz
                    )
   {
     typedef typename MT::vector3_type    V;
@@ -41,9 +44,9 @@ namespace procedural
     
     engine->set_material_structure_map(
                                        rid
-                                       , 0.0
-                                       , 0.0
-                                       , 1.0
+                                       , sx
+                                       , sy
+                                       , sz
                                        );
   }
   
@@ -57,6 +60,9 @@ namespace procedural
                         , MTf::real_type const & width
                         , MTf::real_type const & height
                         , MTf::real_type const & depth
+                        , MTf::real_type const & sx
+                        , MTf::real_type const & sy
+                        , MTf::real_type const & sz
                         );
   
 } //namespace procedural

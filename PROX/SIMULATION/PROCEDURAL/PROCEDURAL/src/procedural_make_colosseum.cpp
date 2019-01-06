@@ -60,6 +60,11 @@ namespace procedural
                       , depth*0.8f
                       , arch_slices
                       , pillar_segments
+                      , 1.0f, 0.0f, 0.0f  // structure field
+                      , 1.0f  // mu iso
+                      , 1.0f  // mu ani x
+                      , 1.0f  // mu ani y
+                      , 1.0f  // mu ani z
                       , mat_info
                       );
 
