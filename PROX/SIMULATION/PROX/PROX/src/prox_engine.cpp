@@ -343,9 +343,6 @@ namespace prox
                                                     );
 
     body.set_structure_map(structure_map);
-
-
-
   }
 
   void Engine::set_material_structure_map(

@@ -43,6 +43,95 @@ namespace procedural
 
     procedural::MaterialInfo<T> mat_info = procedural::create_material_info<MT>(engine);
 
+    if (scene.compare("box_on_inclined_plane") == 0)
+    {
+      // Angle of inclined plane in degrees
+      float const angle = util::to_value<float>(params.get_value("procedural_param_1", "20.0"));
+      
+      // Length of plane slide
+      float const length = util::to_value<float>(params.get_value("procedural_param_2", "32.0"));
+      
+      float const structure_field_plane_x = util::to_value<float>(params.get_value("procedural_param_3", "1.0"));
+      float const structure_field_plane_y = util::to_value<float>(params.get_value("procedural_param_4", "0.0"));
+      float const structure_field_plane_z = util::to_value<float>(params.get_value("procedural_param_5", "0.0"));
+      float const structure_field_box_x   = util::to_value<float>(params.get_value("procedural_param_6", "1.0"));
+      float const structure_field_box_y   = util::to_value<float>(params.get_value("procedural_param_7", "0.0"));
+      float const structure_field_box_z   = util::to_value<float>(params.get_value("procedural_param_8", "0.0"));
+      float const mu_iso                  = util::to_value<float>(params.get_value("procedural_param_9", "1.0"));
+      float const mu_ani_x                = util::to_value<float>(params.get_value("procedural_param_10", "1.0"));
+      float const mu_ani_y                = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
+      float const mu_ani_z                = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
+      
+      procedural::make_ground<MT>(
+                                  engine
+                                  , V::zero()
+                                  , Q::identity()
+                                  , mat_info
+                                  , length*1.2f
+                                  , 1.0f
+                                  , length/3.0f
+                                  );
+      
+      procedural::make_box_on_inclined_plane<MT>(
+                                                 engine
+                                                 , V::zero()
+                                                 , Q::identity()
+                                                 , angle
+                                                 , length
+                                                 , V::make(structure_field_plane_x, structure_field_plane_y, structure_field_plane_z)
+                                                 , V::make(structure_field_box_x, structure_field_box_y, structure_field_box_z )
+                                                 , mu_iso
+                                                 , mu_ani_x
+                                                 , mu_ani_y
+                                                 , mu_ani_z
+                                                 , mat_info
+                                                 );
+    }
+    if (scene.compare("rolling_cylinder") == 0)
+    {
+      // Angle of inclined plane in degrees
+      float const angle = util::to_value<float>(params.get_value("procedural_param_1", "20.0"));
+      
+      // Length of plane slide
+      float const length = util::to_value<float>(params.get_value("procedural_param_2", "32.0"));
+      
+      float const structure_field_plane_x = util::to_value<float>(params.get_value("procedural_param_3", "1.0"));
+      float const structure_field_plane_y = util::to_value<float>(params.get_value("procedural_param_4", "0.0"));
+      float const structure_field_plane_z = util::to_value<float>(params.get_value("procedural_param_5", "0.0"));
+      float const structure_field_box_x   = util::to_value<float>(params.get_value("procedural_param_6", "1.0"));
+      float const structure_field_box_y   = util::to_value<float>(params.get_value("procedural_param_7", "0.0"));
+      float const structure_field_box_z   = util::to_value<float>(params.get_value("procedural_param_8", "0.0"));
+      float const mu_iso                  = util::to_value<float>(params.get_value("procedural_param_9", "1.0"));
+      float const mu_ani_x                = util::to_value<float>(params.get_value("procedural_param_10", "1.0"));
+      float const mu_ani_y                = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
+      float const mu_ani_z                = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
+      
+      procedural::make_ground<MT>(
+                                  engine
+                                  , V::zero()
+                                  , Q::identity()
+                                  , mat_info
+                                  , length*1.2f
+                                  , 1.0f
+                                  , length/3.0f
+                                  );
+      
+      procedural::make_cylinder_on_inclined_plane<MT>(
+                                                      engine
+                                                      , V::zero()
+                                                      , Q::identity()
+                                                      , angle
+                                                      , length
+                                                      , V::make(structure_field_plane_x, structure_field_plane_y, structure_field_plane_z)
+                                                      , V::make(structure_field_box_x, structure_field_box_y, structure_field_box_z )
+                                                      , mu_iso
+                                                      , mu_ani_x
+                                                      , mu_ani_y
+                                                      , mu_ani_z
+                                                      , mat_info
+                                                      );
+      
+    }
     if (scene.compare("arch") == 0)
     {
       procedural::make_ground<MT>(
@@ -72,71 +161,6 @@ namespace procedural
       procedural::make_stack<MT>(
                                  engine, V::make(VT::zero(), VT::zero(), VT::zero()), Q::identity(), VT::one(), layers, mat_info
                                  );
-    }
-    if (scene.compare("box_on_inclined_plane") == 0)
-    {
-      // Angle of inclined plane in degrees
-      float const angle = util::to_value<float>(params.get_value("procedural_param_1", "20.0"));
-
-      // Length of plane slide
-      float const length = util::to_value<float>(params.get_value("procedural_param_2", "32.0"));
-
-      float const structure_field_plane_x = util::to_value<float>(params.get_value("procedural_param_3", "1.0"));
-      float const structure_field_plane_y = util::to_value<float>(params.get_value("procedural_param_4", "0.0"));
-      float const structure_field_plane_z = util::to_value<float>(params.get_value("procedural_param_5", "0.0"));
-      float const structure_field_box_x   = util::to_value<float>(params.get_value("procedural_param_6", "1.0"));
-      float const structure_field_box_y   = util::to_value<float>(params.get_value("procedural_param_7", "0.0"));
-      float const structure_field_box_z   = util::to_value<float>(params.get_value("procedural_param_8", "0.0"));
-      float const mu_iso                  = util::to_value<float>(params.get_value("procedural_param_9", "1.0"));
-      float const mu_ani_x                = util::to_value<float>(params.get_value("procedural_param_10", "1.0"));
-      float const mu_ani_y                = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
-      float const mu_ani_z                = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
-
-      procedural::make_ground<MT>(
-                                  engine
-                                  , V::zero()
-                                  , Q::identity()
-                                  , mat_info
-                                  , length*1.2f
-                                  , 1.0f
-                                  , length/3.0f
-                                  );
-
-      procedural::make_box_on_inclined_plane<MT>(
-                                                 engine
-                                                 , V::zero()
-                                                 , Q::identity()
-                                                 , angle
-                                                 , length
-                                                 , V::make(structure_field_plane_x, structure_field_plane_y, structure_field_plane_z)
-                                                 , V::make(structure_field_box_x, structure_field_box_y, structure_field_box_z )
-                                                 , mu_iso
-                                                 , mu_ani_x
-                                                 , mu_ani_y
-                                                 , mu_ani_z
-                                                 , mat_info
-                                                 );
-    }
-    if (scene.compare("rolling_cylinder") == 0)
-    {
-      // Angle of the slide
-      float const radius = util::to_value<float>(params.get_value("procedural_param_1", "2.0"));
-      // Angle of the down sliding thingy
-      float const length = util::to_value<float>(params.get_value("procedural_param_2", "3.0"));
-
-      // S vector of ramp
-      float const Sa = util::to_value<float>(params.get_value("procedural_param_3", "0.0"));
-      // S vector of cylinder
-      float const Sb = util::to_value<float>(params.get_value("procedural_param_4", "0.0"));
-
-      procedural::make_ground<MT>(
-                                  engine, V::zero(), Q::identity(), mat_info, 32.0f, 1.0f, 20.0f
-                                  );
-
-      procedural::make_cylinder<MT>(
-                                    engine, V::zero(), Q::identity(), radius, length, Sa, Sb, mat_info
-                                    );
-
     }
     if (scene.compare("capsule_hopper") == 0)
     {

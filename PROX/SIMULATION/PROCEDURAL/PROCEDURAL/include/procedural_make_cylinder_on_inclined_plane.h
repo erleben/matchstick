@@ -1,5 +1,5 @@
-#ifndef PROCEDURAL_MAKE_BOX_ON_INCLINED_PLANE_H
-#define PROCEDURAL_MAKE_BOX_ON_INCLINED_PLANE_H
+#ifndef PROCEDURAL_MAKE_CYLINDER_ON_INCLINED_PLANE_H
+#define PROCEDURAL_MAKE_CYLINDER_ON_INCLINED_PLANE_H
 
 #include <procedural.h>
 #include <procedural_factory.h>
@@ -21,7 +21,7 @@ namespace procedural
    *                                 the box given in the body frame coordinate system.
    */
   template<typename MT>
-  void make_box_on_inclined_plane(
+  void make_cylinder_on_inclined_plane(
                                   content::API * engine
                                   , typename MT::vector3_type const & position
                                   , typename MT::quaternion_type const & orientation
@@ -61,20 +61,14 @@ namespace procedural
     T const alpha       = VT::convert_to_radians(angle);   // Plane inclination angle in radians
     T const beta        = VT::pi_half() - alpha;
 
-    assert(alpha >= VT::zero()    || !"make_box_on_inclined_plane(): inclination angle must be 0 <= alpha <= 90 degrees");
-    assert(alpha <= VT::pi_half() || !"make_box_on_inclined_plane(): inclination angle must be 0 <= alpha <= 90 degrees");
+    assert(alpha >= VT::zero()    || !"make_cylinder_on_inclined_plane(): inclination angle must be 0 <= alpha <= 90 degrees");
+    assert(alpha <= VT::pi_half() || !"make_cylinder_on_inclined_plane(): inclination angle must be 0 <= alpha <= 90 degrees");
 
-    T const L =  length/VT::numeric_cast(16.0);    // Box side lengths
-    T const Y =  length/VT::numeric_cast(24.0);    // Box height
+    T const L =  length/VT::numeric_cast(16.0);    // Cylinder height
+    T const R =  length/VT::numeric_cast(32.0);    // Cylinder radius
     T const W =  length;                           // Plane width  (x)
     T const H =  length/VT::numeric_cast(32.0);    // Plane height (y)
     T const D =  length/VT::numeric_cast(8.0);     // Plane depth  (z)
-
-    V const box_extents     = V::make(
-                                      L
-                                      , Y
-                                      , L
-                                      );
 
     V const plane_extents   = V::make(
                                       W
@@ -94,10 +88,9 @@ namespace procedural
                                                                        , plane_extents(2)
                                                                        );
 
-    GeometryHandle<MT> box_handle     = create_geometry_handle_box<MT>(  engine
-                                                                       , box_extents(0)
-                                                                       , box_extents(1)
-                                                                       , box_extents(2)
+    GeometryHandle<MT> cylinder_handle     = create_geometry_handle_cylinder<MT>(  engine
+                                                                       , R
+                                                                       , L
                                                                        );
 
     {
@@ -139,6 +132,8 @@ namespace procedural
 
       engine->set_material_structure_map(
                                          rid
+                                         , VT::zero(), VT::one(), VT::zero()  // Rotation axis
+                                         , VT::one(), VT::zero(), VT::zero()  // Reference point
                                          , structure_field_plane(0)
                                          , structure_field_plane(1)
                                          , structure_field_plane(2)
@@ -146,15 +141,16 @@ namespace procedural
     }
 
     {
-      V const T_b2m = box_handle.Tb2m();
-      Q const Q_b2m = box_handle.Qb2m();
+      V const T_b2m = cylinder_handle.Tb2m();
+      Q const Q_b2m = cylinder_handle.Qb2m();
 
       V const T_m2l = tiny::rotate( Q::Rz(alpha) , V::make(
                                                            W*VT::half() - L
-                                                           , VT::half()*(Y+H)
+                                                           , R + VT::half()*H
                                                            , VT::zero()
                                                            ) );
-      Q const Q_m2l = Q::Rz(alpha);
+
+      Q const Q_m2l = tiny::prod(Q::Rz(alpha), Q::Rx(  VT::pi_half() ) );
 
       V const T_l2w = position + place_on_ground_plane;
       Q const Q_l2w = orientation;
@@ -176,7 +172,7 @@ namespace procedural
       size_t rid = create_rigid_body<MT>(  engine
                                          , T_b2w
                                          , Q_b2w
-                                         , box_handle
+                                         , cylinder_handle
                                          , mid
                                          , stone_density
                                          , false
@@ -195,5 +191,5 @@ namespace procedural
 }
 //namespace procedural
 
-// PROCEDURAL_MAKE_BOX_ON_INCLINED_PLANE_H
+// PROCEDURAL_MAKE_CYLINDER_ON_INCLINED_PLANE_H
 #endif

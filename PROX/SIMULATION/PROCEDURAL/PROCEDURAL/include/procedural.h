@@ -7,6 +7,7 @@
 #include <procedural_make_obj_packing.h>
 #include <procedural_make_grain_packing.h>
 #include <procedural_make_box_on_inclined_plane.h>
+#include <procedural_make_cylinder_on_inclined_plane.h>
 
 #include <content.h>
 #include <mesh_array.h>
