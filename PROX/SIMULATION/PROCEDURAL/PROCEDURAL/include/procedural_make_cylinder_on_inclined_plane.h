@@ -1,7 +1,6 @@
 #ifndef PROCEDURAL_MAKE_CYLINDER_ON_INCLINED_PLANE_H
 #define PROCEDURAL_MAKE_CYLINDER_ON_INCLINED_PLANE_H
 
-#include <procedural.h>
 #include <procedural_factory.h>
 
 #include <tiny_math_types.h>
@@ -29,10 +28,6 @@ namespace procedural
                                   , typename MT::real_type const & length
                                   , typename MT::vector3_type const & structure_field_plane
                                   , typename MT::vector3_type const & strucutre_field_box
-                                  , typename MT::real_type const & mu_iso
-                                  , typename MT::real_type const & mu_ani_x
-                                  , typename MT::real_type const & mu_ani_y
-                                  , typename MT::real_type const & mu_ani_z
                                   , MaterialInfo<typename MT::real_type> mat_info
                                   )
   {
@@ -45,18 +40,6 @@ namespace procedural
 
     size_t const mid           = get_material_id<MT>(mat_info, "Stone");
     size_t const stone_density = get_material_density<MT>(mat_info, "Stone");
-
-    engine->set_coefficient_of_isotropic_friction( mid
-                                                  , mid
-                                                  , mu_iso
-                                                  );
-
-    engine->set_coefficients_of_anisotropic_friction( mid
-                                                     , mid
-                                                     , mu_ani_x
-                                                     , mu_ani_y
-                                                     , mu_ani_z
-                                                     );
 
     T const alpha       = VT::convert_to_radians(angle);   // Plane inclination angle in radians
     T const beta        = VT::pi_half() - alpha;

@@ -1,8 +1,6 @@
 #ifndef PROCEDURAL_MAKE_BALL_H
 #define PROCEDURAL_MAKE_BALL_H
 
-#include <procedural.h>
-
 #include <procedural_factory.h>
 
 #include <tiny_math_types.h>
@@ -12,7 +10,7 @@ namespace procedural
 
   
   template<typename MT>
-  void make_ball(  content::API * engine
+  inline void make_ball(  content::API * engine
                          , typename MT::real_type const & radius
                          , typename MT::vector3_type const & position
                          , typename MT::quaternion_type const & orientation

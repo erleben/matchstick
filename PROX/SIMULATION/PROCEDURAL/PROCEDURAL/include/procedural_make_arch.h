@@ -1,8 +1,6 @@
 #ifndef PROCEDURAL_MAKE_ARCH_H
 #define PROCEDURAL_MAKE_ARCH_H
 
-#include <procedural.h>
-
 #include <procedural_factory.h>
 
 #include <tiny_math_types.h>
@@ -26,10 +24,6 @@ namespace procedural
                         , typename MT::real_type const & structure_field_x
                         , typename MT::real_type const & structure_field_y
                         , typename MT::real_type const & structure_field_z
-                        , typename MT::real_type const & mu_iso
-                        , typename MT::real_type const & mu_ani_x
-                        , typename MT::real_type const & mu_ani_y
-                        , typename MT::real_type const & mu_ani_z
                         , MaterialInfo<typename MT::real_type> mat_info
                         )
   {
@@ -47,19 +41,7 @@ namespace procedural
     T      const center_radius       = ( r_outer + r_inner )*VT::half();
     T      const stone_density       = get_material_density<MT>(mat_info, "Stone");
     size_t const mid                 = get_material_id<MT>(mat_info, "Stone");
-    
-    engine->set_coefficient_of_isotropic_friction( mid
-                                                  , mid
-                                                  , mu_iso
-                                                  );
-    
-    engine->set_coefficients_of_anisotropic_friction( mid
-                                                     , mid
-                                                     , mu_ani_x
-                                                     , mu_ani_y
-                                                     , mu_ani_z
-                                                     );
-    
+        
     size_t rid = 0;
     
     std::vector<V>  arch_vertices(8u);

@@ -62,6 +62,22 @@ namespace procedural
       float const mu_ani_y                = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
       float const mu_ani_z                = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
       
+      {
+        size_t const mid = get_material_id<MT>(mat_info, "Stone");
+        
+        engine->set_coefficient_of_isotropic_friction( mid
+                                                      , mid
+                                                      , mu_iso
+                                                      );
+        
+        engine->set_coefficients_of_anisotropic_friction( mid
+                                                         , mid
+                                                         , mu_ani_x
+                                                         , mu_ani_y
+                                                         , mu_ani_z
+                                                         );
+      }
+
       procedural::make_ground<MT>(
                                   engine
                                   , V::zero()
@@ -81,10 +97,6 @@ namespace procedural
                                                  , length
                                                  , V::make(structure_field_plane_x, structure_field_plane_y, structure_field_plane_z)
                                                  , V::make(structure_field_box_x, structure_field_box_y, structure_field_box_z )
-                                                 , mu_iso
-                                                 , mu_ani_x
-                                                 , mu_ani_y
-                                                 , mu_ani_z
                                                  , mat_info
                                                  );
     }
@@ -107,6 +119,22 @@ namespace procedural
       float const mu_ani_y                = util::to_value<float>(params.get_value("procedural_param_11", "1.0"));
       float const mu_ani_z                = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
       
+      {
+        size_t const mid = get_material_id<MT>(mat_info, "Stone");
+        
+        engine->set_coefficient_of_isotropic_friction( mid
+                                                      , mid
+                                                      , mu_iso
+                                                      );
+        
+        engine->set_coefficients_of_anisotropic_friction( mid
+                                                         , mid
+                                                         , mu_ani_x
+                                                         , mu_ani_y
+                                                         , mu_ani_z
+                                                         );
+      }
+
       procedural::make_ground<MT>(
                                   engine
                                   , V::zero()
@@ -126,10 +154,6 @@ namespace procedural
                                                       , length
                                                       , V::make(structure_field_plane_x, structure_field_plane_y, structure_field_plane_z)
                                                       , V::make(structure_field_box_x, structure_field_box_y, structure_field_box_z )
-                                                      , mu_iso
-                                                      , mu_ani_x
-                                                      , mu_ani_y
-                                                      , mu_ani_z
                                                       , mat_info
                                                       );
       
@@ -150,6 +174,22 @@ namespace procedural
       float const mu_ani_y          = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
       float const mu_ani_z          = util::to_value<float>(params.get_value("procedural_param_13", "1.0"));
       
+      {
+        size_t const mid = get_material_id<MT>(mat_info, "Stone");
+        
+        engine->set_coefficient_of_isotropic_friction( mid
+                                                      , mid
+                                                      , mu_iso
+                                                      );
+        
+        engine->set_coefficients_of_anisotropic_friction( mid
+                                                         , mid
+                                                         , mu_ani_x
+                                                         , mu_ani_y
+                                                         , mu_ani_z
+                                                         );
+      }
+
       procedural::make_ground<MT>(
                                   engine
                                   , V::zero()
@@ -170,10 +210,6 @@ namespace procedural
                                 , structure_field_x
                                 , structure_field_y
                                 , structure_field_z
-                                , mu_iso
-                                , mu_ani_x
-                                , mu_ani_y
-                                , mu_ani_z
                                 , mat_info
                                 );
       
@@ -197,6 +233,22 @@ namespace procedural
       float        const vy                = util::to_value<float>(       params.get_value("procedural_param_14", "0.0"));
       float        const vz                = util::to_value<float>(       params.get_value("procedural_param_15", "0.0"));
       
+      {
+        size_t const mid = get_material_id<MT>(mat_info, "Stone");
+        
+        engine->set_coefficient_of_isotropic_friction( mid
+                                                      , mid
+                                                      , mu_iso
+                                                      );
+        
+        engine->set_coefficients_of_anisotropic_friction( mid
+                                                         , mid
+                                                         , mu_ani_x
+                                                         , mu_ani_y
+                                                         , mu_ani_z
+                                                         );
+      }
+
       procedural::make_ground<MT>(
                                   engine
                                   , V::zero()
@@ -215,10 +267,6 @@ namespace procedural
                                  , structure_field_x
                                  , structure_field_y
                                  , structure_field_z
-                                 , mu_iso
-                                 , mu_ani_x
-                                 , mu_ani_y
-                                 , mu_ani_z
                                  , mat_info
                                  );
       
@@ -232,49 +280,81 @@ namespace procedural
     }
     if (scene.compare("capsule_hopper") == 0)
     {
-      float const funnel_size = util::to_value<float>(params.get_value("procedural_param_1", "10.0"));
-      float const funnel_height = util::to_value<float>(params.get_value("procedural_param_2", "5.0"));
-      float const ground_size = util::to_value<float>(params.get_value("procedural_param_3", "10.0"));
-      float const spacing = util::to_value<float>(params.get_value("procedural_param_4", "0.1"));
-      float const width_x = util::to_value<float>(params.get_value("procedural_param_5", "10.0"));
-      float const height_y = util::to_value<float>(params.get_value("procedural_param_6", "10.0"));
-      float const depth_z = util::to_value<float>(params.get_value("procedural_param_7", "10.0"));
-      float const cylinder_radius = util::to_value<float>(params.get_value("procedural_param_8", "0.5"));
-      float const cylinder_length = util::to_value<float>(params.get_value("procedural_param_9", "1"));
-      unsigned int const structure_direction = util::to_value<float>(params.get_value("procedural_param_10", "1"));
+      float const funnel_size               = util::to_value<float>(params.get_value("procedural_param_1",  "10.0"));
+      float const funnel_height             = util::to_value<float>(params.get_value("procedural_param_2",  "5.0" ));
+      float const ground_size               = util::to_value<float>(params.get_value("procedural_param_3",  "10.0"));
+      float const spacing                   = util::to_value<float>(params.get_value("procedural_param_4",  "0.1" ));
+      size_t const number_in_x              = util::to_value<size_t>(params.get_value("procedural_param_5",  "3"));
+      size_t const number_in_y              = util::to_value<size_t>(params.get_value("procedural_param_6",  "3"));
+      size_t const number_in_z              = util::to_value<size_t>(params.get_value("procedural_param_7",  "3"));
+      float const capsule_radius            = util::to_value<float>(params.get_value("procedural_param_8",  "0.5" ));
+      float const capsule_length            = util::to_value<float>(params.get_value("procedural_param_9",  "1.0" ));
+      float const structure_field_funnel_x  = util::to_value<float>(params.get_value("procedural_param_10", "1.0" ));
+      float const structure_field_funnel_y  = util::to_value<float>(params.get_value("procedural_param_11", "0.0" ));
+      float const structure_field_funnel_z  = util::to_value<float>(params.get_value("procedural_param_12", "0.0" ));
+      float const structure_field_capsule_x = util::to_value<float>(params.get_value("procedural_param_13", "1.0" ));
+      float const structure_field_capsule_y = util::to_value<float>(params.get_value("procedural_param_14", "0.0" ));
+      float const structure_field_capsule_z = util::to_value<float>(params.get_value("procedural_param_15", "0.0" ));
+      float const mu_iso                    = util::to_value<float>(params.get_value("procedural_param_16", "1.0" ));
+      float const mu_ani_x                  = util::to_value<float>(params.get_value("procedural_param_17", "1.0" ));
+      float const mu_ani_y                  = util::to_value<float>(params.get_value("procedural_param_18", "1.0" ));
+      float const mu_ani_z                  = util::to_value<float>(params.get_value("procedural_param_19", "1.0" ));
       
+      {
+        size_t const mid = get_material_id<MT>(mat_info, "Stone");
+        
+        engine->set_coefficient_of_isotropic_friction( mid
+                                                      , mid
+                                                      , mu_iso
+                                                      );
+        
+        engine->set_coefficients_of_anisotropic_friction( mid
+                                                         , mid
+                                                         , mu_ani_x
+                                                         , mu_ani_y
+                                                         , mu_ani_z
+                                                         );
+      }
+
       procedural::make_ground<MT>(
-                                  engine, V::zero(), Q::identity(), mat_info, ground_size, 1.0f, ground_size
+                                  engine
+                                  , V::zero()
+                                  , Q::identity()
+                                  , mat_info
+                                  , ground_size
+                                  , 1.0f
+                                  , ground_size
                                   , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
       
-      //      if (structure_direction == 1)
-      //      {
-      //        procedural::make_obj<MT>(
-      //                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(0, 1, 0),
-      //                                 Q::Rz(VT::pi()), mat_info,
-      //                                 true, false, "Stone", tetset
-      //                                 );
-      //      }
-      //      else
-      //      {
-      //        procedural::make_obj<MT>(
-      //                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(1, 0, 0),
-      //                                 Q::Rz(VT::pi()), mat_info,
-      //                                 true, false, "Stone", tetset
-      //                                 );
-      //      }
-      
+      procedural::make_obj<MT>(
+                               engine
+                               , obj_path + "funnel.obj"        // filename to read
+                               , funnel_size                    // scale of object to be created
+                               , V::make(0, funnel_height, 0)   // position of object
+                               , Q::identity()                  // orientation of object
+                               , structure_field_funnel_x
+                               , structure_field_funnel_y
+                               , structure_field_funnel_z
+                               , mat_info         // material models info
+                               , true            // fixed object
+                               , "Stone"         // material name
+                               , tetset          // tetgen settings
+                               );
       
       procedural::make_dropping_capsules<MT>(
                                              engine
-                                             , V::make(0, funnel_height, 0)
+                                             , V::make(0, 2.0*funnel_height, 0)
                                              , Q::identity()
-                                             , cylinder_radius
-                                             , cylinder_length
+                                             , capsule_radius
+                                             , capsule_length
                                              , spacing
-                                             , structure_direction
-                                             , width_x, height_y, depth_z
+                                             , structure_field_capsule_x
+                                             , structure_field_capsule_y
+                                             , structure_field_capsule_z
+                                             , number_in_x
+                                             , number_in_y
+                                             , number_in_z
                                              , mat_info
                                              );
       

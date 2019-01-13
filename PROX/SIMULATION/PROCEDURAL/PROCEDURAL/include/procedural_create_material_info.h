@@ -1,3 +1,6 @@
+#ifndef PROCEDURAL_CREATE_MATERIAL_INFO_H
+#define PROCEDURAL_CREATE_MATERIAL_INFO_H
+
 #include <procedural_types.h>
 
 #include <content_api.h>
@@ -13,7 +16,7 @@ namespace procedural
 {
   
   template<typename MT>
-  MaterialInfo<typename MT::real_type> create_material_info( content::API * engine )
+  inline MaterialInfo<typename MT::real_type> create_material_info( content::API * engine )
   {
     typedef typename MT::real_type       T;
     typedef typename MT::value_traits    VT;
@@ -175,3 +178,6 @@ namespace procedural
   MaterialInfo<MTf::real_type> create_material_info<MTf>( content::API * engine );
   
 } //namespace procedural
+
+// PROCEDURAL_CREATE_MATERIAL_INFO_H
+#endif
