@@ -10,6 +10,8 @@
 #include <procedural_make_box_on_inclined_plane.h>
 #include <procedural_make_cylinder_on_inclined_plane.h>
 #include <procedural_make_arch.h>
+#include <procedural_make_stack.h>
+#include <procedural_make_ball.h>
 
 #include <content.h>
 #include <mesh_array.h>
@@ -19,29 +21,6 @@
 namespace procedural
 {
   
-  template<typename MT>
-	void make_cannonball(  content::API * engine
-                         , typename MT::real_type         const & radius
-                         , typename MT::vector3_type      const & position
-                         , typename MT::quaternion_type   const & orientation
-                         , typename MT::vector3_type      const & direction
-                         , MaterialInfo<typename MT::real_type> mat_info
-                         );
-	
-  template<typename MT>
-	GeometryHandle<MT> make_cannonball_geometry(  content::API * physics
-                                              , typename MT::real_type const & radius
-                                              );
-	
-  template<typename MT>
-	size_t make_cannonball_rigid_body(  content::API * physics
-                                    , GeometryHandle<MT> const & ball
-                                    , typename MT::vector3_type const & position
-                                    , typename MT::quaternion_type const & orientation
-                                    , typename MT::vector3_type const & direction
-                                    , MaterialInfo<typename MT::real_type> mat_info
-                                    );
-	
   template<typename MT>
 	void make_colosseum(  content::API * engine
                       , typename MT::vector3_type const & position
@@ -177,15 +156,6 @@ namespace procedural
                               , size_t const & sub_divisions
                               , MaterialInfo<typename MT::real_type> mat_info
                               );
-  template<typename MT>
-  void make_stack(
-                  content::API * engine
-                  , typename MT::vector3_type const& position
-                  , typename MT::quaternion_type const & orientation
-                  , typename MT::real_type const & stone_dim
-                  , size_t const & layers
-                  , MaterialInfo<typename MT::real_type> mat_info
-                  );
   
   template<typename MT>
   void make_heavy_sphere_light_sphere(

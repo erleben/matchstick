@@ -13,7 +13,7 @@
 
 namespace procedural
 {
-
+  
   /**
    * This function can be used to quickly generate known test scenes.
    *
@@ -34,15 +34,15 @@ namespace procedural
     typedef typename MT::value_traits VT;
     typedef typename MT::vector3_type V;
     typedef typename MT::quaternion_type Q;
-
+    
     mesh_array::TetGenSettings tetset = mesh_array::tetgen_default_settings();
     tetset.m_quality_ratio      = util::to_value<double>( params.get_value("tetgen_quality_ratio", "2.0")       );
     tetset.m_maximum_volume     = util::to_value<double>( params.get_value("tetgen_maximum_volume", "0.0")      );
     tetset.m_quiet_output       = util::to_value<bool>(   params.get_value("tetgen_quiet_output", "true")       );
     tetset.m_suppress_splitting = util::to_value<bool>(   params.get_value("tetgen_suppress_splitting", "true") );
-
+    
     procedural::MaterialInfo<T> mat_info = procedural::create_material_info<MT>(engine);
-
+    
     if (scene.compare("box_on_inclined_plane") == 0)
     {
       // Angle of inclined plane in degrees
@@ -115,7 +115,7 @@ namespace procedural
                                   , length*1.2f
                                   , 1.0f
                                   , length/3.0f
-                                  , 0.0f, 0.0f, 1.0f   // structure direction of ground
+                                  , 0.0f, 0.0f, 1.0f   // Structure direction of ground
                                   );
       
       procedural::make_cylinder_on_inclined_plane<MT>(
@@ -150,16 +150,15 @@ namespace procedural
       float const mu_ani_y          = util::to_value<float>(params.get_value("procedural_param_12", "1.0"));
       float const mu_ani_z          = util::to_value<float>(params.get_value("procedural_param_13", "1.0"));
       
-      // Has structural field in x-direction
       procedural::make_ground<MT>(
                                   engine
                                   , V::zero()
                                   , Q::identity()
                                   , mat_info
                                   , 10.0f, 1.0f, 10.0f
-                                  , 1.0, 0.0, 0.0
+                                  , 1.0, 0.0, 0.0      // Has structural field in x-direction
                                   );
-
+      
       procedural::make_arch<MT>(
                                 engine, V::zero(), Q::identity()
                                 , r_outer
@@ -177,20 +176,59 @@ namespace procedural
                                 , mu_ani_z
                                 , mat_info
                                 );
-
+      
     }
     if (scene.compare("stack") == 0)
     {
+      
+      unsigned int const layers            = util::to_value<unsigned int>(params.get_value("procedural_param_1", "5"));
+      float        const stone_width       = util::to_value<float>(       params.get_value("procedural_param_2", "1.0"));
+      float        const structure_field_x = util::to_value<float>(       params.get_value("procedural_param_3", "1.0"));
+      float        const structure_field_y = util::to_value<float>(       params.get_value("procedural_param_4", "0.0"));
+      float        const structure_field_z = util::to_value<float>(       params.get_value("procedural_param_5", "0.0"));
+      float        const mu_iso            = util::to_value<float>(       params.get_value("procedural_param_6", "1.0"));
+      float        const mu_ani_x          = util::to_value<float>(       params.get_value("procedural_param_7", "1.0"));
+      float        const mu_ani_y          = util::to_value<float>(       params.get_value("procedural_param_8", "1.0"));
+      float        const mu_ani_z          = util::to_value<float>(       params.get_value("procedural_param_9", "1.0"));
+      float        const px                = util::to_value<float>(       params.get_value("procedural_param_10", "5.0"));
+      float        const py                = util::to_value<float>(       params.get_value("procedural_param_11", "10.0"));
+      float        const pz                = util::to_value<float>(       params.get_value("procedural_param_12", "0.0"));
+      float        const vx                = util::to_value<float>(       params.get_value("procedural_param_13", "-10.0"));
+      float        const vy                = util::to_value<float>(       params.get_value("procedural_param_14", "0.0"));
+      float        const vz                = util::to_value<float>(       params.get_value("procedural_param_15", "0.0"));
+      
       procedural::make_ground<MT>(
-                                  engine, V::zero(), Q::identity(), mat_info, 10.0f, 1.0f, 10.0f
+                                  engine
+                                  , V::zero()
+                                  , Q::identity()
+                                  , mat_info
+                                  , 10.0f, 1.0f, 10.0f
                                   , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
-
-      unsigned int const layers = util::to_value<unsigned int>(params.get_value("procedural_param_1", "5"));
-
+      
       procedural::make_stack<MT>(
-                                 engine, V::make(VT::zero(), VT::zero(), VT::zero()), Q::identity(), VT::one(), layers, mat_info
+                                 engine
+                                 , V::make(VT::zero(), VT::zero(), VT::zero())
+                                 , Q::identity()
+                                 , stone_width
+                                 , layers
+                                 , structure_field_x
+                                 , structure_field_y
+                                 , structure_field_z
+                                 , mu_iso
+                                 , mu_ani_x
+                                 , mu_ani_y
+                                 , mu_ani_z
+                                 , mat_info
                                  );
+      
+      procedural::make_ball<MT>(engine
+                                , stone_width/2.0f  // radius
+                                , V::make(px,py,pz) // position
+                                , Q::identity()
+                                , V::make(vx,vy,vz) // velocity
+                                , mat_info
+                                );
     }
     if (scene.compare("capsule_hopper") == 0)
     {
@@ -204,30 +242,30 @@ namespace procedural
       float const cylinder_radius = util::to_value<float>(params.get_value("procedural_param_8", "0.5"));
       float const cylinder_length = util::to_value<float>(params.get_value("procedural_param_9", "1"));
       unsigned int const structure_direction = util::to_value<float>(params.get_value("procedural_param_10", "1"));
-
+      
       procedural::make_ground<MT>(
                                   engine, V::zero(), Q::identity(), mat_info, ground_size, 1.0f, ground_size
                                   , 0.0f, 0.0f, 1.0f   // structure direction of ground
                                   );
-
-//      if (structure_direction == 1)
-//      {
-//        procedural::make_obj<MT>(
-//                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(0, 1, 0),
-//                                 Q::Rz(VT::pi()), mat_info,
-//                                 true, false, "Stone", tetset
-//                                 );
-//      }
-//      else
-//      {
-//        procedural::make_obj<MT>(
-//                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(1, 0, 0),
-//                                 Q::Rz(VT::pi()), mat_info,
-//                                 true, false, "Stone", tetset
-//                                 );
-//      }
-
-
+      
+      //      if (structure_direction == 1)
+      //      {
+      //        procedural::make_obj<MT>(
+      //                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(0, 1, 0),
+      //                                 Q::Rz(VT::pi()), mat_info,
+      //                                 true, false, "Stone", tetset
+      //                                 );
+      //      }
+      //      else
+      //      {
+      //        procedural::make_obj<MT>(
+      //                                 engine, obj_path + "funnel.obj", funnel_size, V::make(0, funnel_height, 0), V::make(1, 0, 0),
+      //                                 Q::Rz(VT::pi()), mat_info,
+      //                                 true, false, "Stone", tetset
+      //                                 );
+      //      }
+      
+      
       procedural::make_dropping_capsules<MT>(
                                              engine
                                              , V::make(0, funnel_height, 0)
@@ -239,9 +277,9 @@ namespace procedural
                                              , width_x, height_y, depth_z
                                              , mat_info
                                              );
-
+      
     }
-
+    
   }
 }//namespace procedural
 
