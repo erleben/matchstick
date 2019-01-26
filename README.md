@@ -12,10 +12,11 @@ The code has been developed and tested using
 * Xcode ver 10.1
 * Macport 2.5.4 (for installing Boost, Glew and Qt)
 
-Dependencies can be easy installed using macport
+Dependencies can be installed as follows
 
-    sudo port install boost@1.66.0_3+no_single-no_static+python36+universal
-    sudo port install glew@1.9.0_0+universal
+    sudo port install python37
+    sudo port install boost @1.66.0_3+no_single-no_static+python37
+    sudo port install glew@1.9.0_0
 
 ## How to Compile and Link
 
