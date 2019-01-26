@@ -39,7 +39,7 @@ CMake should be used for generating make/solution files.
 
 The actual matchstick model i simplemented in a single file
 
-https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_matchstick_model.h
+[prox_matchstick_model.h](https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_matchstick_model.h)
 
 In this file the method "compute_coefficients_of_friction" and "compute_contact_frame" gives the core functionality that generates the coefficient and orientation of the anisotropic friction cone.
 
