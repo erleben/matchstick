@@ -17,6 +17,7 @@ Dependencies can be installed as follows
     sudo port install python37
     sudo port install boost @1.66.0_3+no_single-no_static+python37
     sudo port install glew @2.1.0
+    sudo port install qt511 @5.11.3
 
 ## How to Compile and Link
 
