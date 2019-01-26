@@ -45,16 +45,16 @@ In this file the method "compute_coefficients_of_friction" and "compute_contact_
 
 These functions are used respectively in the files 
 
-https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_get_friction_coefficient_vector.h
-https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_get_jacobian_matrix.h
+[prox_get_friction_coefficient_vector.h](https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_get_friction_coefficient_vector.h)
+[prox_get_jacobian_matrix.h](https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/prox_get_jacobian_matrix.h)
 
 The first file implements a function that assembles a vector of friction coefficients and the other file implements a function that assembles a Jacobian matrix. These two functions are invoked in a time-stepper before invoking the contact force solver. A time stepper implementation can be seen in this file
 
-https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/steppers/prox_moreau_time_stepper.h
+[prox_moreau_time_stepper.h](https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/steppers/prox_moreau_time_stepper.h)
 
 The stepper invokes a prox solver function after having assembled all the data needed that defines the contact force problem. A typical Gauss-Seidle type of solver can be seen in the file
 
-https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/solvers/prox_gauss_seidel_solver.h
+[prox_gauss_seidel_solver.h](https://github.com/diku-dk/matchstick/blob/master/PROX/SIMULATION/PROX/PROX/include/solvers/prox_gauss_seidel_solver.h)
 
 Here the solver is simply one function that iterates over the contact points and invokes a proximal operator first on the normal block of the contact problem and then the friction block of the contact. 
 
