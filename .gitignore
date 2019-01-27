@@ -45,3 +45,7 @@ bin/output
 bin/temporary.ele
 bin/temporary.node
 bin/temporary.poly
+PROX/SIMULATION/.DS_Store
+PROX/3RDPARTY/.DS_Store
+PROX/.DS_Store
+.DS_Store
