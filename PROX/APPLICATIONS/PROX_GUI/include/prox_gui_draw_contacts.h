@@ -68,6 +68,40 @@ namespace prox_gui
 
     geometry_manager.add("contact", geometry);
   }
+  
+  
+  inline void draw_vector(
+                           glm::mat4 const & view_matrix
+                     ,  glm::vec3 const & p
+                     , glm::vec3 const & v
+                     , float const & scale
+                     , Geometry const & arrow_geometry
+                     , gl3::Program & program
+                     )
+  {
+    using std::acos;
+    using std::fabs;
+    
+    glm::vec3 const up =glm::vec3(0,1,0);
+
+    float const cos_theta = glm::dot(up, v);
+    
+    glm::vec3 const axis = (fabs(cos_theta) < 0.99) ? glm::cross(up, v) : glm::vec3(1,0,0);
+    
+    float const radians = acos(cos_theta);
+    
+    glm::mat4 const scale_matrix = glm::scale(glm::mat4(1.0), glm::vec3(scale,scale,scale));
+    glm::mat4 const rotation_matrix = glm::rotate( glm::mat4(1.0), radians, axis);
+    glm::mat4 const translation_matrix = glm::translate( glm::mat4(1.0), p);
+    glm::mat4 const model_view_matrix =  view_matrix * translation_matrix * rotation_matrix * scale_matrix;
+    
+    program.set_uniform( "model_view_matrix", model_view_matrix);
+    
+    arrow_geometry.m_solid_vao.bind();
+    arrow_geometry.m_vbo.draw();
+    arrow_geometry.m_solid_vao.unbind();
+  }
+  
 
   inline void draw_contacts(
                             content::API * engine
@@ -79,8 +113,7 @@ namespace prox_gui
                             , GeometryManager  & geometry_manager
                             )
   {
-    using std::acos;
-    using std::fabs;
+    float const scale = util::to_value<float>(params.get_value("draw_contacts_scaling", "1.0"));
 
     gl3::check_errors("draw_contacts() invoked");
 
@@ -101,35 +134,22 @@ namespace prox_gui
     float nx = 0.0;
     float ny = 0.0;
     float nz = 0.0;
+    float sx = 0.0;
+    float sy = 0.0;
+    float sz = 0.0;
 
-    glm::vec3 const up =glm::vec3(0,1,0);
     for( size_t c = 0; c < engine->get_number_of_contacts(); ++c)
     {
       engine->get_contact_position(c, x, y, z);
-      // engine->get_contact_structure(c, nx, ny, nz); // For visualizing the structure directions
+      engine->get_contact_structure_direction(c, sx, sy, sz); 
       engine->get_contact_normal(c, nx, ny, nz);
-
+      
       glm::vec3 const p = glm::vec3(x,y,z);
       glm::vec3 const n = glm::normalize( glm::vec3(nx,ny,nz) );
-
-      float const cos_theta = glm::dot(up, n);
-
-      glm::vec3 const axis = (fabs(cos_theta) < 0.99) ? glm::cross(up, n) : glm::vec3(1,0,0);
-
-      float const radians = acos(cos_theta);
-
-      float const scale = util::to_value<float>(params.get_value("draw_contacts_scaling", "1.0"));
-
-      glm::mat4 const scale_matrix = glm::scale(glm::mat4(1.0), glm::vec3(scale,scale,scale));
-      glm::mat4 const rotation_matrix = glm::rotate( glm::mat4(1.0), radians, axis);
-      glm::mat4 const translation_matrix = glm::translate( glm::mat4(1.0), p);
-      glm::mat4 const model_view_matrix =  view_matrix * translation_matrix * rotation_matrix * scale_matrix;
-
-      program.set_uniform( "model_view_matrix", model_view_matrix);
-
-      geometry.m_solid_vao.bind();
-      geometry.m_vbo.draw();
-      geometry.m_solid_vao.unbind();
+      glm::vec3 const s = glm::normalize( glm::vec3(sx,sy,sz) );
+      
+      draw_vector(view_matrix, p, n, scale, geometry, program);
+      draw_vector(view_matrix, p, s, scale, geometry, program);
     }
 
     program.stop();
