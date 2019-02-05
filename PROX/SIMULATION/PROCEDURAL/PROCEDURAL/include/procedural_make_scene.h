@@ -196,7 +196,7 @@ namespace procedural
                                   , Q::identity()
                                   , mat_info
                                   , 10.0f, 1.0f, 10.0f
-                                  , 1.0, 0.0, 0.0      // Has structural field in x-direction
+                                  , 0.0, 0.0, 1.0      // Has structural field in z-direction
                                   );
       
       procedural::make_arch<MT>(

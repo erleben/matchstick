@@ -71,8 +71,7 @@ namespace prox
     
     T  const two_pi = VT::two()*VT::pi();
     V3 const n      = tiny::unit(axis);
-    V3 const v      = tiny::unit(ref);
-    V3 const r = v - tiny::inner_prod(v, n)*n;
+    V3 const r      = tiny::unit(ref - tiny::inner_prod(ref, n)*n);
 
     structure_map.bind(mesh);
     
@@ -83,9 +82,8 @@ namespace prox
       T  const x = X(vertex);
       T  const y = Y(vertex);
       T  const z = Z(vertex);
-      V3 const q = tiny::unit(V3::make(x,y,z));
-      
-      V3 const p = q - tiny::inner_prod(q, n)*n;
+      V3 const q = V3::make(x,y,z);      
+      V3 const p = tiny::unit(q - tiny::inner_prod(q, n)*n );
 
       
       bool const flipped = tiny::inner_prod( tiny::cross( r, p ), n ) < VT::zero();

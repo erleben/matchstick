@@ -36,8 +36,10 @@ namespace procedural
     typedef typename MT::value_traits    VT;
     
     T      const delta_theta         = VT::pi()/arch_slices;
+    
     T      const pillar_stone_width  = pillar_height > VT::zero() ? pillar_height / pillar_segments : VT::one();
     T      const pillar_stone_height = r_outer - r_inner;
+    
     T      const center_radius       = ( r_outer + r_inner )*VT::half();
     T      const stone_density       = get_material_density<MT>(mat_info, "Stone");
     size_t const mid                 = get_material_id<MT>(mat_info, "Stone");
@@ -111,11 +113,6 @@ namespace procedural
                                          );
     }
     
-    V const s = tiny::rotate(
-                             Q::Rz(VT::pi_half())
-                             , V::make( structure_field_x, structure_field_y, structure_field_z)
-                             );
-
     // Creating the round top part of the arch
     for(size_t i = 0;i<arch_slices;++i)
     {
@@ -156,9 +153,9 @@ namespace procedural
       
       engine->set_material_structure_map(
                                          rid
-                                         , VT::zero(), VT::zero(), VT::one()  // rotation axis
-                                         , VT::zero(), VT::one(), VT::zero()  // reference point
-                                         , s(0), s(1), s(2)                   // reference structure direction
+                                         , VT::zero(), VT::zero(), VT::one()                         // rotation axis
+                                         , VT::zero(), VT::one(), VT::zero()                         // reference point
+                                         , structure_field_x, structure_field_y, structure_field_z   // reference structure direction
                                          );
     }
   }
