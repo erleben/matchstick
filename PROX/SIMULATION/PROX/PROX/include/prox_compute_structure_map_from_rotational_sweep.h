@@ -52,49 +52,49 @@ namespace prox
    */
   template<typename MT>
   inline void compute_structure_map_from_rotational_sweep(
-                                             mesh_array::T4Mesh const & mesh
-                                            , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & X
-                                            , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Y
-                                            , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Z
-                                            , typename MT::vector3_type const & axis
-                                            , typename MT::vector3_type const & ref
-                                            , typename MT::vector3_type const & s
-                                            , mesh_array::VertexAttribute<typename MT::vector3_type, mesh_array::T4Mesh> & structure_map
-                                               )
+                                                          mesh_array::T4Mesh const & mesh
+                                                          , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & X
+                                                          , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Y
+                                                          , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Z
+                                                          , typename MT::vector3_type const & axis
+                                                          , typename MT::vector3_type const & ref
+                                                          , typename MT::vector3_type const & s
+                                                          , mesh_array::VertexAttribute<typename MT::vector3_type, mesh_array::T4Mesh> & structure_map
+                                                          )
   {
     using std::acos;
-
+    
     typedef typename MT::value_traits    VT;
     typedef typename MT::real_type       T;
     typedef typename MT::vector3_type    V3;
     typedef typename MT::quaternion_type Q;
-
+    
     T  const two_pi = VT::two()*VT::pi();
     V3 const n      = tiny::unit(axis);
     V3 const r      = tiny::unit(ref);
-
+    
     structure_map.bind(mesh);
-
+    
     for ( size_t idx = 0u; idx < mesh.vertex_size(); ++idx)
     {
       mesh_array::Vertex const vertex = mesh.vertex( idx );
-
+      
       T  const x = X(vertex);
       T  const y = Y(vertex);
       T  const z = Z(vertex);
       V3 const p = tiny::unit(V3::make(x,y,z));
-
+      
       bool const flipped = tiny::inner_prod( tiny::cross( r, p ), n ) < VT::zero();
       T    const psi     = acos( tiny::inner_prod(p, r) );
       T    const theta   = flipped ? (two_pi - psi) : psi;
-
+      
       Q  const R     = Q::Ru( theta, n);
       V3 const s_new = tiny::rotate(R, s);
       
       structure_map(vertex) = s_new;
     }
   }
-
+  
 }// namespace prox
 
 

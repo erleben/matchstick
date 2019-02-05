@@ -157,9 +157,9 @@ namespace procedural
       
       engine->set_material_structure_map(
                                          rid
-                                         , VT::zero(), VT::zero(), VT::one()
-                                         , VT::zero(), VT::one(), VT::zero()
-                                         , s(0), s(1), s(2)
+                                         , VT::zero(), VT::zero(), VT::one()  // rotation axis
+                                         , VT::zero(), VT::one(), VT::zero()  // reference point
+                                         , s(0), s(1), s(2)                   // reference structure direction
                                          );
     }
   }
