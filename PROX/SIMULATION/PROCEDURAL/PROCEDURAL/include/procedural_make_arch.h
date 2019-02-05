@@ -111,12 +111,11 @@ namespace procedural
                                          );
     }
     
-    
     V const s = tiny::rotate(
                              Q::Rz(VT::pi_half())
                              , V::make( structure_field_x, structure_field_y, structure_field_z)
                              );
-    
+
     // Creating the round top part of the arch
     for(size_t i = 0;i<arch_slices;++i)
     {

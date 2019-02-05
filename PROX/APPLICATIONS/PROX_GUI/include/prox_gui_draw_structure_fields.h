@@ -62,14 +62,11 @@ namespace prox_gui
     for(;object!=end;++object)
     {
       glm::mat4 const model_view_matrix =  view_matrix * object->m_model_matrix;
-      program.set_uniform( "model_view_matrix", model_view_matrix);
       
       MaterialInfo structure_object_material = structure_vector_material;
-      
-      structure_object_material.m_Kd_red   =  red[object->m_rid % 10];
-      structure_object_material.m_Kd_green =  green[object->m_rid % 10];
-      structure_object_material.m_Kd_blue  =  blue[object->m_rid % 10];
-
+      structure_object_material.m_Kd_red     =  red[object->m_rid % 10];
+      structure_object_material.m_Kd_green   =  green[object->m_rid % 10];
+      structure_object_material.m_Kd_blue    =  blue[object->m_rid % 10];
       set_material_uniforms(program, structure_object_material);
       
       size_t N = 0u;
@@ -77,7 +74,7 @@ namespace prox_gui
       engine->get_tetramesh_shape(object->m_gid, N, K);
       
       if( N==0 || K==0) // Empty tetramesh, no need to save anything
-      continue;
+        continue;
       
       std::vector<size_t> vertices;
       std::vector<size_t> tetrahedra;

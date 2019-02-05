@@ -22,7 +22,6 @@ namespace prox_gui
                                    )
   {
     typedef tiny::MathTypes<float>       MT;
-    typedef typename MT::vector3_type    V;
     
     gl3::Program & program = program_manager.get(2);
     

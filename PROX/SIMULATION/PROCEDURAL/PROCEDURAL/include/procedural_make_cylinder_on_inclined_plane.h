@@ -16,8 +16,8 @@ namespace procedural
    * @param  length                  The length of the plane slide part of the plane.
    * @param  structure_field_plane   The constant structure field direction of
    *                                 the plane given in the body frame coordinate system.
-   * @param  structure_field_box     The constant structure field direction of
-   *                                 the box given in the body frame coordinate system.
+   * @param  structure_field_cylinder     The constant structure field direction of
+   *                                 the cylinder given in the body frame coordinate system.
    */
   template<typename MT>
   inline void make_cylinder_on_inclined_plane(
@@ -27,7 +27,7 @@ namespace procedural
                                   , typename MT::real_type const & angle
                                   , typename MT::real_type const & length
                                   , typename MT::vector3_type const & structure_field_plane
-                                  , typename MT::vector3_type const & strucutre_field_box
+                                  , typename MT::vector3_type const & structure_field_cylinder
                                   , MaterialInfo<typename MT::real_type> mat_info
                                   )
   {
@@ -115,8 +115,6 @@ namespace procedural
 
       engine->set_material_structure_map(
                                          rid
-                                         , VT::zero(), VT::one(), VT::zero()  // Rotation axis
-                                         , VT::one(), VT::zero(), VT::zero()  // Reference point
                                          , structure_field_plane(0)
                                          , structure_field_plane(1)
                                          , structure_field_plane(2)
@@ -163,9 +161,11 @@ namespace procedural
 
       engine->set_material_structure_map(
                                          rid
-                                         , strucutre_field_box(0)
-                                         , strucutre_field_box(1)
-                                         , strucutre_field_box(2)
+                                         , VT::zero(), VT::one(), VT::zero()  // Rotation axis
+                                         , VT::one(), VT::zero(), VT::zero()  // Reference point
+                                         , structure_field_cylinder(0)
+                                         , structure_field_cylinder(1)
+                                         , structure_field_cylinder(2)
                                          );
     }
 
