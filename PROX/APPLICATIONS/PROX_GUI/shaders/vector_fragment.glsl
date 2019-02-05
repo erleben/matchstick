@@ -17,6 +17,7 @@ struct MaterialInfo
   vec3 Kd;                 // diffuse color
   vec3 Ka;                 // ambient color
   float specular_exponent; // specular 'power'
+  float alpha;             // transparency (not really used in this shader)
 };
 
 in vec3 position_eye;
@@ -24,9 +25,10 @@ in vec3 normal_eye;
 
 out vec4 frag_color;
 
-uniform mat4         view_matrix;
-uniform int          number_of_lights;
-uniform LightInfo    lights[4];
+uniform mat4              view_matrix;
+uniform int               number_of_lights;
+uniform LightInfo         lights[4];
+uniform MaterialInfo      material;
 
 /**
  * @param P  surface point position in Eye frame
@@ -75,13 +77,6 @@ vec3 compute_light_intensity(LightInfo light, MaterialInfo model, vec3 P, vec3 N
 
 void main()
 {
-  MaterialInfo material;
-
-  material.Ks = vec3(0.3,0.3,0.3);
-  material.Kd = vec3(0.1,0.3,0.7);
-  material.Ka = vec3(0.1,0.1,0.1);
-  material.specular_exponent = 100;
-
   vec3 accum = vec3(0.0,0.0,0.0);
   for (int i=0; i<number_of_lights; ++i)
   {

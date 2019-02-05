@@ -47,7 +47,7 @@ namespace prox_gui
 
       materials.push_back(material);
     }
-
+ 
     make_shader_programs(shader_path, program_manager);
 
     gl3::Program & solid_program  = program_manager.get(0);

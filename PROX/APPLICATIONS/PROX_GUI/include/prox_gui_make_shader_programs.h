@@ -56,8 +56,8 @@ namespace prox_gui
     }
     
     {
-      std::string const vertex_shader_file   = shader_path + "contact_vertex.glsl";
-      std::string const fragment_shader_file = shader_path + "contact_fragment.glsl";
+      std::string const vertex_shader_file   = shader_path + "vector_vertex.glsl";
+      std::string const fragment_shader_file = shader_path + "vector_fragment.glsl";
       
       program_manager.load(vertex_shader_file, fragment_shader_file);
     }
