@@ -29,6 +29,7 @@ namespace procedural
     typedef typename MT::vector3_type       V;
     typedef typename MT::quaternion_type    Q;
     typedef typename MT::value_traits       VT;
+    typedef typename MT::coordsys_type      C;
     
     T      const stone_density	= get_material_density<MT>(mat_info, "Stone");
     size_t const mid		        = get_material_id<MT>(mat_info, "Stone");
@@ -90,12 +91,30 @@ namespace procedural
                                              , stone_density
                                              );
           
+          
+          // 2019-03-04 Kenny: Apply X_m2b to rotational sweep! The structure
+          // field rotational sweep are specified in the model frame of the arch stone.
+          // The sweep parameters must be mapped into the body frame with respect to
+          // which the geometry (vertex coordinates) are stored with.
+          C const X_b2m = C::make(T_b2m, Q_b2m);
+          C const X_m2b = tiny::inverse(X_b2m);
+          
+          V const axis_mf   = V::make(VT::zero(), VT::one(),  VT::zero() );
+          V const center_mf = V::make(VT::zero(), VT::zero(), VT::zero() );
+          V const ref_mf    = V::make(VT::one(),  VT::zero(), VT::zero() );
+          V const s_mf      = V::make(structure_field_x, structure_field_y, structure_field_z);
+          
+          V const axis       = tiny::xform_vector(X_m2b, axis_mf);
+          V const center     = tiny::xform_point(X_m2b, center_mf);
+          V const ref        = tiny::xform_vector(X_m2b, ref_mf);
+          V const s          = tiny::xform_vector(X_m2b, s_mf);
+          
           engine->set_material_structure_map(
                                              rid
-                                             , VT::zero(), VT::one(), VT::zero()                        // rotation axis
-                                             , VT::zero(), VT::zero(), VT::zero()                       // center of rotation
-                                             , VT::one(), VT::zero(), VT::zero()                        // reference point
-                                             , structure_field_x, structure_field_y, structure_field_z  // direction at reference point
+                                             , axis(0), axis(1), axis(2)            // rotation axis
+                                             , center(0), center(1), center(2)      // center of rotation
+                                             , ref(0), ref(1), ref(2)               // reference point
+                                             , s(0), s(1), s(2)                     // reference structure direction
                                              );
           
         }

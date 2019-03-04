@@ -32,9 +32,10 @@ namespace procedural
     
     typedef typename MT::real_type       T;
     typedef typename MT::vector3_type    V;
-    typedef typename MT::quaternion_type  Q;
+    typedef typename MT::quaternion_type Q;
     typedef typename MT::value_traits    VT;
-    
+    typedef typename MT::coordsys_type   C;
+
     T      const delta_theta         = VT::pi()/arch_slices;
     
     T      const pillar_stone_width  = pillar_height > VT::zero() ? pillar_height / pillar_segments : VT::one();
@@ -58,7 +59,7 @@ namespace procedural
     
     GeometryHandle<MT> arch_stone   = create_geometry_handle_cuboid<MT>( engine, &arch_vertices[0] );
     GeometryHandle<MT> pillar_stone = create_geometry_handle_box<MT>( engine, pillar_stone_width, pillar_stone_height, stone_depth );
-        
+    
     // Creating the stones in the two sides
     for (size_t i = 0; i < pillar_segments; ++i)
     {
@@ -152,20 +153,29 @@ namespace procedural
                                   );
       
       
-      // TODO 2019-03-04 Kenny: Apply X_m2b to rotational sweep! The structure
+      // 2019-03-04 Kenny: Apply X_m2b to rotational sweep! The structure
       // field rotational sweep are specified in the model frame of the arch stone.
       // The sweep parameters must be mapped into the body frame with respect to
       // which the geometry (vertex coordinates) are stored with.
+      C const X_b2m = C::make(T_b2m, Q_b2m);
+      C const X_m2b = tiny::inverse(X_b2m);
       
+      V const axis_mf   = V::make(VT::zero(), VT::zero(), VT::one());
+      V const center_mf = V::make(VT::zero(), - center_radius, VT::zero() );
+      V const ref_mf    = V::make(VT::zero(), VT::one(), VT::zero() );
+      V const s_mf      = V::make(structure_field_x, structure_field_y, structure_field_z);
       
-      T const cy = center_radius + T_b2m(1);   // model frame center of rotation
-      
+      V const axis       = tiny::xform_vector(X_m2b, axis_mf);
+      V const center     = tiny::xform_point(X_m2b, center_mf);
+      V const ref        = tiny::xform_vector(X_m2b, ref_mf);
+      V const s          = tiny::xform_vector(X_m2b, s_mf);
+
       engine->set_material_structure_map(
                                          rid
-                                         , VT::zero(), VT::zero(), VT::one()                         // rotation axis
-                                         , VT::zero(), cy, VT::zero()                                 // center of rotation
-                                         , VT::zero(), VT::one(), VT::zero()                         // reference point
-                                         , structure_field_x, structure_field_y, structure_field_z   // reference structure direction
+                                         , axis(0), axis(1), axis(2)            // rotation axis
+                                         , center(0), center(1), center(2)      // center of rotation
+                                         , ref(0), ref(1), ref(2)               // reference point
+                                         , s(0), s(1), s(2)                     // reference structure direction
                                          );
     }
   }
