@@ -5,6 +5,7 @@
 
 namespace prox
 {
+  
   /**
    *  The structure map holds information of the structure direction in the
    *  vertices. This is a structure map creates a map by sweeping a given
@@ -76,11 +77,11 @@ namespace prox
     typedef typename MT::vector3_type    V3;
     typedef typename MT::quaternion_type Q;
     
-    T  const two_pi = VT::two()*VT::pi();
-    V3 const n      = tiny::unit(axis);
-    V3 const r      = tiny::unit(ref - tiny::inner_prod(ref, n)*n);
-    V3 const c      = center;
-
+    T  const two_pi     = VT::two()*VT::pi();
+    V3 const n          = tiny::unit(axis);
+    V3 const r          = tiny::unit(ref - tiny::inner_prod(ref, n)*n);
+    V3 const c          = center;
+    
     structure_map.bind(mesh);
     
     for ( size_t idx = 0u; idx < mesh.vertex_size(); ++idx)
@@ -92,12 +93,11 @@ namespace prox
       T  const z = Z(vertex);
       V3 const q = V3::make(x,y,z) - c;
       V3 const p = tiny::unit(q - tiny::inner_prod(q, n)*n );
-
       
       bool const flipped = tiny::inner_prod( tiny::cross( r, p ), n ) < VT::zero();
       T    const psi     = acos( tiny::inner_prod(p, r) );
       T    const theta   = flipped ? (two_pi - psi) : psi;
-
+      
       Q  const R     = Q::Ru( theta, n);
       V3 const s_new = tiny::rotate(R, s);
       
