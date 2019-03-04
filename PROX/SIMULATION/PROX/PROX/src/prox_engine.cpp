@@ -329,9 +329,9 @@ namespace prox
     mesh_array::T4Mesh          const & mesh     = geometry.m_mesh;
 
     mesh_array::VertexAttribute<V,mesh_array::T4Mesh> structure_map;
-
+    
     V const n = tiny::unit( V::make(rot_x, rot_y, rot_z) );
-    V const c = tiny::unit( V::make(cen_x, cen_y, cen_z) );
+    V const c = V::make(cen_x, cen_y, cen_z);
     V const r = tiny::unit( V::make(ref_x, ref_y, ref_z) );
     V const s = tiny::unit( V::make(dir_x, dir_y, dir_z) );
 
