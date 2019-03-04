@@ -151,9 +151,19 @@ namespace procedural
                                   , stone_density
                                   );
       
+      
+      // TODO 2019-03-04 Kenny: Apply X_m2b to rotational sweep! The structure
+      // field rotational sweep are specified in the model frame of the arch stone.
+      // The sweep parameters must be mapped into the body frame with respect to
+      // which the geometry (vertex coordinates) are stored with.
+      
+      
+      T const cy = center_radius + T_b2m(1);   // model frame center of rotation
+      
       engine->set_material_structure_map(
                                          rid
                                          , VT::zero(), VT::zero(), VT::one()                         // rotation axis
+                                         , VT::zero(), cy, VT::zero()                                 // center of rotation
                                          , VT::zero(), VT::one(), VT::zero()                         // reference point
                                          , structure_field_x, structure_field_y, structure_field_z   // reference structure direction
                                          );

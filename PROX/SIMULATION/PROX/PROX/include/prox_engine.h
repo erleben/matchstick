@@ -176,6 +176,9 @@ namespace prox
                                     , float const & rot_x
                                     , float const & rot_y
                                     , float const & rot_z
+                                    , float const & cen_x
+                                    , float const & cen_y
+                                    , float const & cen_z
                                     , float const & ref_x
                                     , float const & ref_y
                                     , float const & ref_z

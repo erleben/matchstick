@@ -49,6 +49,12 @@ namespace prox
    *    y1 = y0 + sy(i);
    *    plot([x0 x1],[y0 y1],'-bo');
    *   end
+   *
+   *
+   * @param axis         The rotation axis of the rotational sweep
+   * @param center       Center of rotational sweep
+   * @param ref          A reference point with respect to the center of rotation position
+   * @param s            The structure field value at the reference point. The reference point s-value is the zero-angle value that is rotated around the axis with respect to the rotation center.
    */
   template<typename MT>
   inline void compute_structure_map_from_rotational_sweep(
@@ -57,6 +63,7 @@ namespace prox
                                                           , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Y
                                                           , mesh_array::VertexAttribute<typename MT::real_type, mesh_array::T4Mesh> const & Z
                                                           , typename MT::vector3_type const & axis
+                                                          , typename MT::vector3_type const & center
                                                           , typename MT::vector3_type const & ref
                                                           , typename MT::vector3_type const & s
                                                           , mesh_array::VertexAttribute<typename MT::vector3_type, mesh_array::T4Mesh> & structure_map
@@ -72,6 +79,7 @@ namespace prox
     T  const two_pi = VT::two()*VT::pi();
     V3 const n      = tiny::unit(axis);
     V3 const r      = tiny::unit(ref - tiny::inner_prod(ref, n)*n);
+    V3 const c      = center;
 
     structure_map.bind(mesh);
     
@@ -82,7 +90,7 @@ namespace prox
       T  const x = X(vertex);
       T  const y = Y(vertex);
       T  const z = Z(vertex);
-      V3 const q = V3::make(x,y,z);      
+      V3 const q = V3::make(x,y,z) - c;
       V3 const p = tiny::unit(q - tiny::inner_prod(q, n)*n );
 
       

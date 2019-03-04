@@ -69,6 +69,7 @@ namespace procedural
     engine->set_material_structure_map(
                                        rid
                                        , VT::zero(), VT::one(), VT::zero()   // rotation axis
+                                       , VT::zero(), VT::zero(), VT::zero()  // center of rotation
                                        , VT::one(), VT::zero(), VT::zero()   // reference point
                                        , structure_field_x                   // structure direction at reference point
                                        , structure_field_y
