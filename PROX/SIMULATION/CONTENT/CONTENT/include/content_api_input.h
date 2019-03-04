@@ -25,7 +25,7 @@ namespace content
      * @return              An unique index value identifying the newly created rigid body.
      */
     virtual size_t create_rigid_body( std::string const & name ) = 0;
-
+    
     /**
      * Connect collision geometry to rigid body.
      *
@@ -33,7 +33,7 @@ namespace content
      * @param geometry_idx    The unique index value representing the collision geometry.
      */
     virtual void connect_collision_geometry(size_t body_idx, size_t geometry_idx ) = 0;
-
+    
     /**
      * Create a new material.
      *
@@ -57,7 +57,7 @@ namespace content
      * @return       An unique index value representing the newly created collision geometry.
      */
     virtual size_t create_collision_geometry( std::string const & name ) = 0;
-
+    
   public:
     
     // Destroyers
@@ -68,7 +68,7 @@ namespace content
     virtual void clear() = 0;
     
   public:
-
+    
     // Setters
     
     /**
@@ -81,7 +81,7 @@ namespace content
     virtual void set_parameter(std::string const & name, unsigned    const & value ) = 0;
     virtual void set_parameter(std::string const & name, float       const & value ) = 0;
     virtual void set_parameter(std::string const & name, std::string const & value ) = 0;
-
+    
     /**
      * Set Rigid Body Position.
      *
@@ -192,17 +192,17 @@ namespace content
                                 , float const & y
                                 , float const & z
                                 ) = 0;
-
+    
     /**
      * Set Gravity Acceleration.
      */
     virtual void set_gravity_acceleration( float const & acceleration ) = 0;
-
+    
     /**
      * Set Linear and Angular Damping Parameters.
      */
     virtual void set_damping_parameters( float const & linear, float const & angular ) = 0;
-
+    
     /**
      * Set Friction Coefficients.
      *
@@ -218,7 +218,7 @@ namespace content
                                                           , float const & mu_y
                                                           , float const & mu_z
                                                           ) = 0;
-
+    
     /**
      * Set Friction Coefficients.
      *
@@ -230,7 +230,7 @@ namespace content
                                                        , size_t const & second_idx
                                                        , float const & mu
                                                        ) = 0;
-
+    
     /**
      * Set Material Structure Map.
      *
@@ -240,12 +240,12 @@ namespace content
      * @param dir_z        The z-ccodinate of the materials characteristic direction.
      */
     virtual void set_material_structure_map(
-                                    size_t const & body_idx
-                                    , float const & dir_x
-                                    , float const & dir_y
-                                    , float const & dir_z
-                                    ) = 0;
-
+                                            size_t const & body_idx
+                                            , float const & dir_x
+                                            , float const & dir_y
+                                            , float const & dir_z
+                                            ) = 0;
+    
     /**
      * Set Material Structure Map.
      * This version sweeps a specified structure direction around a given
@@ -256,6 +256,9 @@ namespace content
      * @param rot_x        The x-ccodinate of the rotation axis.
      * @param rot_y        The y-ccodinate of the rotation axis.
      * @param rot_z        The z-ccodinate of the rotation axis.
+     * @param cen_x        The x-ccodinate of the center of rotation.
+     * @param cen_y        The y-ccodinate of the center of rotation.
+     * @param cen_z        The z-ccodinate of the center of rotation.
      * @param ref_x        The x-ccodinate of the reference direction.
      * @param ref_y        The y-ccodinate of the reference direction.
      * @param ref_z        The z-ccodinate of the reference direction.
@@ -264,18 +267,21 @@ namespace content
      * @param dir_z        The z-ccodinate of the materials characteristic direction.
      */
     virtual void set_material_structure_map(
-                                    size_t const & body_idx
-                                    , float const & rot_x
-                                    , float const & rot_y
-                                    , float const & rot_z
-                                    , float const & ref_x
-                                    , float const & ref_y
-                                    , float const & ref_z
-                                    , float const & dir_x
-                                    , float const & dir_y
-                                    , float const & dir_z
-                                    ) = 0;
-
+                                            size_t const & body_idx
+                                            , float const & rot_x
+                                            , float const & rot_y
+                                            , float const & rot_z
+                                            , float const & cen_x
+                                            , float const & cen_y
+                                            , float const & cen_z
+                                            , float const & ref_x
+                                            , float const & ref_y
+                                            , float const & ref_z
+                                            , float const & dir_x
+                                            , float const & dir_y
+                                            , float const & dir_z
+                                            ) = 0;
+    
     /**
      * Set Material Structure Map.
      * This version supports a more raw data access.
@@ -285,7 +291,7 @@ namespace content
      * @param data      An array that holds the coordinates of all the structure directions.
      */
     virtual void set_material_structure_map(size_t const & body_idx, size_t const & N, size_t * indices, float *  data) = 0;
-
+    
     /**
      * Set Restitution Coefficient.
      *
@@ -313,7 +319,7 @@ namespace content
                                , float const & height
                                , float const & depth
                                ) = 0;
-
+    
     /**
      * Set Capsule Shape Parameters.
      *
@@ -325,7 +331,7 @@ namespace content
                                    , float const & radius
                                    , float const & height
                                    ) = 0;
-
+    
     /**
      * Set Cone Shape Parameters.
      *
@@ -338,7 +344,7 @@ namespace content
                                 , float const & height
                                 ) = 0;
     
-
+    
     /**
      * Set Convex Shape Parameters.
      *
@@ -352,7 +358,7 @@ namespace content
                                   , float const * coordinates
                                   ) = 0;
     
-
+    
     /**
      * Set cylinder Shape Parameters.
      *
@@ -378,7 +384,7 @@ namespace content
                                      , float const & sy
                                      , float const & sz
                                      ) = 0;
-
+    
     /**
      * Set Sphere Shape Parameters.
      *
@@ -389,7 +395,7 @@ namespace content
                                   , float const & radius
                                   ) = 0;
     
-
+    
     /**
      * Set Tetramesh Shape Parameters.
      * Observe that a shape can only have one tetramesh and tetrameshes live in body space by definition
@@ -410,7 +416,7 @@ namespace content
                                      , size_t const * tetrahedra
                                      , float const * coordinates
                                      ) = 0;
-
+    
     /**
      * Connect external forces to a rigid body.
      *
@@ -418,7 +424,7 @@ namespace content
      * @param force_idx  The index value identifying the exernal force type.
      */
     virtual void connect_force( size_t body_idx, size_t force_idx ) = 0;
-
+    
     /**
      * Creates a new pin force instance.
      * A pin force creates a critical damped spring force that drives an
@@ -428,14 +434,14 @@ namespace content
      * @return   A unique force index identifying the newly created pin force.
      */
     virtual size_t create_pin_force() const = 0;
-
+    
     /**
      * Set characteristic time for pin force.
      *
      * @param tau   The value of the characteristic time.
      */
     virtual void set_pin_tau(size_t const & force_idx, float const & tau ) = 0;
-
+    
     /**
      * Set target position for pin force.
      *
@@ -444,7 +450,7 @@ namespace content
      * @param z  The z-coordinate.
      */
     virtual void set_pin_target(size_t const & force_idx, float const & x, float const & y, float const & z ) = 0;
-
+    
     /**
      * Set anchor position for pin force.
      *
@@ -453,8 +459,8 @@ namespace content
      * @param z  The z-coordinate.
      */
     virtual void set_pin_anchor(size_t const & force_idx, float const & x, float const & y, float const & z ) = 0;
-
-
+    
+    
     /**
      * Connected a rigid body with a scripted motion.
      * The given body must be a free moving rigid body by making the
@@ -466,14 +472,14 @@ namespace content
      * @param motion_idx  The index of the scripted motion (must have been created prior to this invocation)
      */
     virtual void connect_scripted_motion( size_t const & body_idx, size_t const & motion_idx ) = 0;
-
+    
     /**
      * Create a new key frame scripted motion.
      *
      * @return    The unique scripted motion index representing this motion.
      */
     virtual size_t create_key_frame_scripted_motion() = 0;
-
+    
     /**
      * Set scripted body position at given time
      */
@@ -484,7 +490,7 @@ namespace content
                                            , float const & y
                                            , float const & z
                                            ) = 0;
-
+    
     /**
      * Set scripted body orientation at given time
      */
@@ -496,15 +502,15 @@ namespace content
                                               , float const & qy
                                               , float const & qz
                                               ) = 0;
-
-
+    
+    
     /**
      * Create a new harmonic oscilator scripted motion.
      *
      * @return    The unique scripted motion index representing this motion.
      */
     virtual size_t create_oscilation_scripted_motion() = 0;
-
+    
     /**
      * Set motion parameters of harmonic oscilator scripted motion.
      *
@@ -532,7 +538,7 @@ namespace content
                                                    , float const & ref_y
                                                    , float const & ref_z
                                                    ) = 0;
-
+    
   };
   
 }// namespace content

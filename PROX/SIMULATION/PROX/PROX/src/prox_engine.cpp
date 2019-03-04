@@ -307,6 +307,9 @@ namespace prox
                                           , float const & rot_x
                                           , float const & rot_y
                                           , float const & rot_z
+                                          , float const & cen_x
+                                          , float const & cen_y
+                                          , float const & cen_z
                                           , float const & ref_x
                                           , float const & ref_y
                                           , float const & ref_z
@@ -328,6 +331,7 @@ namespace prox
     mesh_array::VertexAttribute<V,mesh_array::T4Mesh> structure_map;
 
     V const n = tiny::unit( V::make(rot_x, rot_y, rot_z) );
+    V const c = tiny::unit( V::make(cen_x, cen_y, cen_z) );
     V const r = tiny::unit( V::make(ref_x, ref_y, ref_z) );
     V const s = tiny::unit( V::make(dir_x, dir_y, dir_z) );
 
@@ -337,6 +341,7 @@ namespace prox
                                                     , geometry.m_Y0
                                                     , geometry.m_Z0
                                                     , n   // rotation axis
+                                                    , c   // center of rotation
                                                     , r   // reference point
                                                     , s   // structure direction at reference point
                                                     , structure_map
