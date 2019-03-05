@@ -484,6 +484,8 @@ namespace prox_gui
       
       if(m_xml_record)
       {
+        assert(!m_xml_play || !"load_config_file(): xml_play and xml_record can not both be on at same time.");
+        
         // Prepare xml channel recording
         std::vector<size_t> rids;
         size_t const N = m_engine.get_number_of_rigid_bodies();
