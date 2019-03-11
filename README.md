@@ -272,7 +272,7 @@ Inside the configuration files one can locate a set of variables that control th
 
 One can set the total simulated time, the time-step size as well as the overall method choices. Below is shown some typical settings.
 
-``ìni
+```ini
 total_time            = 4.0
 time_step             = 0.01
 absolute_tolerance    = 0.0
